@@ -24,8 +24,9 @@ let package = Package(
     targets: [
         .target(
             name: "SwiftUIBackports",
-            dependencies: ["SwiftBackports"],
+            dependencies: ["SwiftBackports", "SwiftUIBackportsObjc"],
             resources: [.process("Resources/PrivacyInfo.xcprivacy")]
-        )
+        ),
+        .target(name: "SwiftUIBackportsObjc"),
     ],
 )
