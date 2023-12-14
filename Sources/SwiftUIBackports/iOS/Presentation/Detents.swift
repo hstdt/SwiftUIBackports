@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftBackports
+import SwiftUIBackportsObjc
 
 @available(tvOS, deprecated: 16)
 @available(macOS, deprecated: 13)
@@ -103,6 +104,12 @@ public extension Backport<Any> {
         }
 
         public let id: Identifier
+        public let constant: CGFloat
+
+        init(id: Identifier, constant: CGFloat? = nil) {
+            self.id = id
+            self.constant = constant ?? -1
+        }
 
         /// The system detent for a sheet that's approximately half the height of
         /// the screen, and is inactive in compact height.
@@ -115,6 +122,11 @@ public extension Backport<Any> {
             .init(id: .large)
         }
 
+        /// A custom detent with a fixed height
+        public static func custom(_ constant: CGFloat) -> PresentationDetent {
+            return .init(id: .init(rawValue: "\(constant)"), constant: constant)
+        }
+
         fileprivate static var none: PresentationDetent {
             return .init(id: .init(rawValue: ""))
         }
@@ -124,7 +136,7 @@ public extension Backport<Any> {
             case (.large, .medium):
                 return false
             default:
-                return true
+                return lhs.constant <= rhs.constant
             }
         }
     }
@@ -192,8 +204,10 @@ private extension Backport.Representable {
                         switch $0 {
                         case .medium:
                             return .medium()
-                        default:
+                        case .large:
                             return .large()
+                        default:
+                            return ._detent(withIdentifier: $0.id.rawValue, constant: $0.constant)
                         }
                     }
 
