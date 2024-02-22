@@ -129,7 +129,7 @@ extension Backport where Wrapped == Any {
                 let resolved = updatedUrl ?? url
                 #if os(macOS)
                 NSWorkspace.shared.open(resolved)
-                #elseif os(iOS) || os(tvOS)
+                #elseif os(iOS) || os(tvOS) || os(visionOS)
                 UIApplication.shared.open(resolved)
                 #else
                 WKExtension.shared().openSystemURL(resolved)
