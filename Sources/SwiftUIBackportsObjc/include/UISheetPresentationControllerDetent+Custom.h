@@ -5,7 +5,8 @@
 //  Created by tdt on 2023/12/14.
 //
 
-#import <UIKit/UIKit.h>
+#if __has_include(<UIKit/UIKit.h>)
+@import UIKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,3 +15,4 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+#endif
