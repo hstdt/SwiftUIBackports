@@ -6,11 +6,11 @@ import ObjectiveC
 
 extension UITableViewCell {
     
-    private static var configuredViewAssociatedKey: Void?
-    
+    nonisolated(unsafe) static var configuredViewAssociatedKey = malloc(1)
+
     fileprivate var configuredView: UIView? {
         get { objc_getAssociatedObject(self, &Self.configuredViewAssociatedKey) as? UIView }
-        set { objc_setAssociatedObject(self, &Self.configuredViewAssociatedKey, newValue, .OBJC_ASSOCIATION_ASSIGN) }
+        set { objc_setAssociatedObject(self, &Self.configuredViewAssociatedKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
 }
 
