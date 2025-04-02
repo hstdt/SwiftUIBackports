@@ -6,8 +6,8 @@ import ObjectiveC
 
 extension UICollectionViewCell {
     
-    private static var configuredViewAssociatedKey: Void?
-    
+    nonisolated(unsafe) static var configuredViewAssociatedKey: Int = 0
+
     fileprivate var configuredView: UIView? {
         get { objc_getAssociatedObject(self, &Self.configuredViewAssociatedKey) as? UIView }
         set { objc_setAssociatedObject(self, &Self.configuredViewAssociatedKey, newValue, .OBJC_ASSOCIATION_ASSIGN) }
