@@ -122,10 +122,10 @@ public extension Backport<Any> {
 
         public static func < (lhs: PresentationDetent, rhs: PresentationDetent) -> Bool {
             switch (lhs, rhs) {
-            case (.large, .medium):
-                return false
-            default:
+            case (.medium, .large):
                 return true
+            default:
+                return false
             }
         }
     }
