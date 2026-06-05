@@ -1,0 +1,31 @@
+name: Release Label Check
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled, unlabeled, ready_for_review]
+
+jobs:
+  validate-release-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate release label
+        shell: bash
+        run: |
+          labels='${{ toJson(github.event.pull_request.labels.*.name) }}'
+
+          major_count=$(echo "$labels" | grep -o '"release:major"' | wc -l | tr -d ' ')
+          minor_count=$(echo "$labels" | grep -o '"release:minor"' | wc -l | tr -d ' ')
+          total=$((major_count + minor_count))
+
+          if [ "$total" -eq 1 ]; then
+            echo "Release label check passed."
+            exit 0
+          fi
+
+          if [ "$total" -eq 0 ]; then
+            echo "::error::Missing release label. Add one of: release:major or release:minor."
+            exit 1
+          fi
+
+          echo "::error::Only one release label is allowed. Remove either release:major or release:minor."
+          exit 1

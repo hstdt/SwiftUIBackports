@@ -1,0 +1,67 @@
+name: Tag on merged PR
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: release-tag-main
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    if: >
+      github.event.pull_request.merged == true &&
+      (
+        contains(github.event.pull_request.labels.*.name, 'release:major') ||
+        contains(github.event.pull_request.labels.*.name, 'release:minor')
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine bump level
+        id: bump
+        shell: bash
+        run: |
+          labels='${{ toJson(github.event.pull_request.labels.*.name) }}'
+
+          if echo "$labels" | grep -q '"release:major"'; then
+            echo "level=major" >> "$GITHUB_OUTPUT"
+          else
+            echo "level=minor" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Compute next tag
+        id: next
+        shell: bash
+        run: |
+          latest=$(git tag --sort=-v:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | head -n1)
+          [ -z "$latest" ] && latest="0.0.0"
+
+          IFS='.' read -r major minor patch <<< "$latest"
+
+          if [ "${{ steps.bump.outputs.level }}" = "major" ]; then
+            major=$((major + 1))
+            minor=0
+            patch=0
+          else
+            minor=$((minor + 1))
+            patch=0
+          fi
+
+          next="${major}.${minor}.${patch}"
+          echo "tag=${next}" >> "$GITHUB_OUTPUT"
+
+      - name: Create and push tag
+        shell: bash
+        run: |
+          git tag "${{ steps.next.outputs.tag }}"
+          git push origin "${{ steps.next.outputs.tag }}"
