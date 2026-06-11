@@ -180,7 +180,7 @@ private extension Backport.Representable {
     final class Controller: UIViewController, UIAdaptivePresentationControllerDelegate {
         var isModal: Bool
         var onAttempt: (() -> Void)?
-        weak var _delegate: UIAdaptivePresentationControllerDelegate?
+        nonisolated(unsafe) weak var _delegate: UIAdaptivePresentationControllerDelegate?
 
         init(isModal: Bool, onAttempt: (() -> Void)?) {
             self.isModal = isModal

@@ -8,25 +8,13 @@ protocol ColorProvider {
 
 struct AccentColorProvider: ColorProvider {
     var color: UIColor? {
-        if #available(iOS 15, *) {
-            return .tintColor
-        } else if #available(iOS 14, *) {
-            return UIColor(Color.accentColor)
-        } else {
-            return UIColor.systemBlue
-        }
+        .tintColor
     }
 }
 
 struct TintShapeStyle: ColorProvider {
     var color: UIColor? {
-        if #available(iOS 15, *) {
-            return .tintColor
-        } else if #available(iOS 14, *) {
-            return UIColor(Color.accentColor)
-        } else {
-            return UIColor.systemBlue
-        }
+        .tintColor
     }
 }
 

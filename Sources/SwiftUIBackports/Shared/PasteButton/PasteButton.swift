@@ -140,7 +140,7 @@ public extension Backport where Wrapped == Any {
             Button {
                 onPaste()
             } label: {
-                Backport.Label(title, systemImage: systemImage)
+                Label(title, systemImage: systemImage)
             }
             .buttonStyle(PasteButtonStyle())
             .disabled(isEnabled)
@@ -169,13 +169,8 @@ struct PasteButtonStyle: PrimitiveButtonStyle {
                     .padding(.horizontal)
                     .padding(.vertical, 8)
                     .backport.background {
-                        if #available(iOS 15, *) {
-                            RoundedRectangle(cornerRadius: 8)
-                                .foregroundStyle(.tint)
-                        } else {
-                            RoundedRectangle(cornerRadius: 8)
-                                .foregroundColor(.accentColor)
-                        }
+                        RoundedRectangle(cornerRadius: 8)
+                            .foregroundStyle(.tint)
                     }
             }
         }

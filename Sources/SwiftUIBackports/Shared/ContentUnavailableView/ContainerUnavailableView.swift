@@ -35,7 +35,7 @@ extension Backport<Any> {
             VStack(spacing: 10) {
                 VStack(spacing: 15) {
                     label
-                        .backport.labelStyle(.contentUnavailable)
+                        .labelStyle(.contentUnavailable)
 
                     description
                         .foregroundColor(.secondary)
@@ -54,7 +54,7 @@ extension Backport<Any> {
             VStack(spacing: 20) {
                 VStack {
                     label
-                        .backport.labelStyle(.contentUnavailable)
+                        .labelStyle(.contentUnavailable)
 
                     description
                         .font(.subheadline)
@@ -88,7 +88,7 @@ public extension Backport<Any>.ContentUnavailableView where Label == Text, Descr
 @available(macOS, deprecated: 11, message: "Use SwiftUI.Label instead")
 @available(tvOS, deprecated: 14, message: "Use SwiftUI.Label instead")
 @available(watchOS, deprecated: 7, message: "Use SwiftUI.Label instead")
-public extension Backport<Any>.ContentUnavailableView where Label == Backport<Any>.Label<Text, SwiftUI.Image>, Description == Text?, Actions == EmptyView {
+public extension Backport<Any>.ContentUnavailableView where Label == SwiftUI.Label<Text, SwiftUI.Image>, Description == Text?, Actions == EmptyView {
     init(
         _ titleKey: LocalizedStringKey,
         image name: String,
@@ -104,7 +104,7 @@ public extension Backport<Any>.ContentUnavailableView where Label == Backport<An
         systemImage name: String,
         description: Text? = nil
     ) {
-        self.label = Backport.Label(titleKey, systemImage: name)
+        self.label = Label(titleKey, systemImage: name)
         self.description = description.flatMap { $0 }
         self.actions = EmptyView()
     }
@@ -115,7 +115,7 @@ public extension Backport<Any>.ContentUnavailableView where Label == Backport<An
 @available(macOS, deprecated: 14)
 @available(tvOS, deprecated: 17)
 @available(watchOS, deprecated: 10)
-private extension BackportLabelStyle where Self == ContentUnavailableLabelStyle {
+private extension LabelStyle where Self == ContentUnavailableLabelStyle {
     static var contentUnavailable: Self { .init() }
 }
 
@@ -123,7 +123,7 @@ private extension BackportLabelStyle where Self == ContentUnavailableLabelStyle 
 @available(macOS, deprecated: 14)
 @available(tvOS, deprecated: 17)
 @available(watchOS, deprecated: 10)
-private struct ContentUnavailableLabelStyle: BackportLabelStyle {
+private struct ContentUnavailableLabelStyle: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
         VStack(spacing: 10) {
             configuration.icon
@@ -142,11 +142,11 @@ private struct ContentUnavailableLabelStyle: BackportLabelStyle {
     }
 }
 #else
-private extension BackportLabelStyle where Self == ContentUnavailableLabelStyle {
+private extension LabelStyle where Self == ContentUnavailableLabelStyle {
     static var contentUnavailable: Self { .init() }
 }
 
-private struct ContentUnavailableLabelStyle: BackportLabelStyle {
+private struct ContentUnavailableLabelStyle: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
         VStack(spacing: 20) {
             configuration.icon

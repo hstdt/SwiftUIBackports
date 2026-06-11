@@ -155,7 +155,7 @@ private extension Backport.Representable {
         var detents: Set<Backport<Any>.PresentationDetent>
         var selection: Binding<Backport<Any>.PresentationDetent>?
         var largestUndimmed: Backport<Any>.PresentationDetent?
-        weak var _delegate: UISheetPresentationControllerDelegate?
+        nonisolated(unsafe) weak var _delegate: UISheetPresentationControllerDelegate?
 
         init(detents: Set<Backport<Any>.PresentationDetent>, selection: Binding<Backport<Any>.PresentationDetent>?) {
             self.detents = detents

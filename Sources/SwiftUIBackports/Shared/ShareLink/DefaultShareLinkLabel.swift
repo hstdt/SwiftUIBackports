@@ -29,7 +29,7 @@ public struct DefaultShareLinkLabel: View {
                 Image(systemName: Self.shareIcon)
             }
         } else {
-            Backport.Label {
+            Label {
                 text
             } icon: {
                 #if os(macOS)
