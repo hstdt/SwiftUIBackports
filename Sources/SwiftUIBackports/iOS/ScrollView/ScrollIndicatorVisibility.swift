@@ -11,7 +11,7 @@ extension Backport where Wrapped == Any {
     ///
     /// Pass a value of this type to the ``View.backport.scrollIndicators(_:axes:)`` method
     /// to specify the preferred scroll indicator visibility of a view hierarchy.
-    public struct ScrollIndicatorVisibility: Hashable, CustomStringConvertible {
+    public struct ScrollIndicatorVisibility: Hashable, CustomStringConvertible, Sendable {
         internal enum IndicatorVisibility: Hashable {
             case automatic
             case visible

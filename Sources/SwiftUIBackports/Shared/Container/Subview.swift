@@ -1,9 +1,8 @@
 import SwiftUI
 
 extension Backport<Any> {
-    @MainActor
-    @preconcurrency public struct Subview: View, Identifiable {
-        public struct ID: Hashable, @unchecked Sendable {
+    nonisolated public struct Subview: View, Identifiable, ~Sendable {
+        public struct ID: Hashable, ~Sendable {
             var wrapped: AnyHashable
         }
 

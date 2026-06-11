@@ -1,10 +1,6 @@
 import SwiftUI
 import SwiftBackports
 
-@available(iOS, deprecated: 14)
-@available(macOS, deprecated: 11)
-@available(tvOS, deprecated: 14)
-@available(watchOS, deprecated: 7)
 extension Backport where Wrapped == Any {
 
     /// A label style that only displays the icon of the label.
@@ -29,10 +25,6 @@ extension Backport where Wrapped == Any {
 
 }
 
-@available(iOS, deprecated: 14)
-@available(macOS, deprecated: 11)
-@available(tvOS, deprecated: 14)
-@available(watchOS, deprecated: 7)
 extension BackportLabelStyle where Self == Backport<Any>.IconOnlyLabelStyle {
 
     /// A label style that only displays the icon of the label.

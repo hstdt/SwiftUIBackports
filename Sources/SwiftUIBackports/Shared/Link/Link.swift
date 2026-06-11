@@ -68,6 +68,10 @@ extension Backport<Any> {
     }
 }
 
+@available(iOS, deprecated: 14, message: "Use SwiftUI.Link instead")
+@available(tvOS, deprecated: 14, message: "Use SwiftUI.Link instead")
+@available(macOS, deprecated: 11, message: "Use SwiftUI.Link instead")
+@available(watchOS, deprecated: 7, message: "Use SwiftUI.Link instead")
 extension Backport<Any>.Link where Label == Text {
     /// Creates a control, consisting of a URL and a title key, used to
     /// navigate to a URL.

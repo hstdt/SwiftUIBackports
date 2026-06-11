@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/shaps80/SwiftBackports",
       "state" : {
-        "revision" : "19ce89c82df9c042f4153d204c03fc904cab9c98",
-        "version" : "26.0.1"
+        "revision" : "3f124391744c30b3b13da37924e648647d14522a",
+        "version" : "26.2.0"
       }
     }
   ],

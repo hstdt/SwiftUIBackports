@@ -1,10 +1,10 @@
 import SwiftUI
 import SwiftBackports
 
-@available(iOS, deprecated: 16)
-@available(tvOS, deprecated: 16)
-@available(macOS, deprecated: 13)
-@available(watchOS, deprecated: 9)
+@available(iOS, introduced: 15, deprecated: 16)
+@available(tvOS, introduced: 15, deprecated: 16)
+@available(macOS, introduced: 12, deprecated: 13)
+@available(watchOS, introduced: 8, deprecated: 9)
 @MainActor
 public extension Backport where Wrapped: View {
 
@@ -30,13 +30,9 @@ public extension Backport where Wrapped: View {
     ///
     /// - Parameter visibility: The preferred visibility of the drag indicator.
     @ViewBuilder
-    func presentationDragIndicator(_ visibility: Backport<Any>.Visibility) -> some View {
+    func presentationDragIndicator(_ visibility: SwiftUI.Visibility) -> some View {
         #if os(iOS)
-        if #available(iOS 15, *) {
-            wrapped.background(Backport<Any>.Representable(visibility: visibility))
-        } else {
-            wrapped
-        }
+        wrapped.background(Backport<Any>.Representable(visibility: visibility))
         #else
         wrapped
         #endif
@@ -48,7 +44,7 @@ public extension Backport where Wrapped: View {
 @available(iOS 15, *)
 private extension Backport where Wrapped == Any {
     struct Representable: UIViewControllerRepresentable {
-        let visibility: Backport<Any>.Visibility
+        let visibility: SwiftUI.Visibility
 
         func makeUIViewController(context: Context) -> Backport.Representable.Controller {
             Controller(visibility: visibility)
@@ -64,9 +60,9 @@ private extension Backport where Wrapped == Any {
 private extension Backport.Representable {
     final class Controller: UIViewController {
 
-        var visibility: Backport<Any>.Visibility
+        var visibility: SwiftUI.Visibility
 
-        init(visibility: Backport<Any>.Visibility) {
+        init(visibility: SwiftUI.Visibility) {
             self.visibility = visibility
             super.init(nibName: nil, bundle: nil)
         }
@@ -85,7 +81,7 @@ private extension Backport.Representable {
             update(visibility: visibility)
         }
 
-        func update(visibility: Backport<Any>.Visibility) {
+        func update(visibility: SwiftUI.Visibility) {
             self.visibility = visibility
 
             if let controller = parent?.sheetPresentationController {

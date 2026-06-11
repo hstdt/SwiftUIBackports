@@ -11,7 +11,7 @@ extension Backport where Wrapped == Any {
     ///
     /// Use this type in a call to the ``View.backport.scrollDismissesKeyboard(_:)``
     /// modifier to specify the dismissal behavior of scrollable views.
-    public struct ScrollDismissesKeyboardMode: Hashable, CustomStringConvertible {
+    public struct ScrollDismissesKeyboardMode: Hashable, CustomStringConvertible, Sendable {
         internal enum DismissMode: Hashable {
             case automatic
             case immediately

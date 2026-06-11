@@ -1,7 +1,6 @@
 import SwiftUI
 import SwiftBackports
 
-@MainActor
 public extension Backport where Wrapped: View {
 
     /// Layers the views that you specify behind this view.
@@ -126,7 +125,7 @@ public extension Backport where Wrapped: View {
     ///     The last view that you list appears at the front of the stack.
     ///
     /// - Returns: A view that uses the specified content as a background.
-    func background<Content: View>(alignment: Alignment = .center, @ViewBuilder _ content: () -> Content) -> some View {
+    nonisolated func background<Content: View>(alignment: Alignment = .center, @ViewBuilder _ content: () -> Content) -> some View {
         wrapped.background(content(), alignment: alignment)
     }
 

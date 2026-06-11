@@ -1,13 +1,9 @@
 import SwiftUI
 import SwiftBackports
 
-@available(iOS, deprecated: 14)
-@available(macOS, deprecated: 11)
-@available(tvOS, deprecated: 14.0)
-@available(watchOS, deprecated: 7.0)
 extension Backport where Wrapped == Any {
     /// The properties of a progress view instance.
-    public struct ProgressViewStyleConfiguration {
+    public struct ProgressViewStyleConfiguration: Sendable {
 
         internal enum Kind {
             case circular

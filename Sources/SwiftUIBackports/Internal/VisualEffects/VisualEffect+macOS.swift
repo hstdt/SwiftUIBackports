@@ -48,6 +48,7 @@ private extension VisualEffectBlur {
 
     }
 
+    @MainActor
     class Coordinator {
         let visualEffectView = NSVisualEffectView()
 

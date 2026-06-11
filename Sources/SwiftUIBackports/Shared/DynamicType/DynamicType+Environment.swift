@@ -2,7 +2,11 @@ import SwiftUI
 import SwiftBackports
 
 private struct BackportDynamicTypeKey: EnvironmentKey {
-    static var defaultValue: Backport.DynamicTypeSize = .large
+    @available(iOS, deprecated: 15)
+    @available(tvOS, deprecated: 15)
+    @available(macOS, deprecated: 12)
+    @available(watchOS, deprecated: 8)
+    nonisolated(unsafe) static let defaultValue: Backport.DynamicTypeSize = .large
 }
 
 @available(iOS, deprecated: 15)
@@ -42,12 +46,20 @@ public extension EnvironmentValues {
 }
 
 private struct DynamicTypeRangeKey: EnvironmentKey {
+    @available(iOS, deprecated: 15)
+    @available(tvOS, deprecated: 15)
+    @available(macOS, deprecated: 12)
+    @available(watchOS, deprecated: 8)
     static var defaultValue: Range<Backport<Any>.DynamicTypeSize> {
         .init(uncheckedBounds: (lower: .xSmall, upper: .accessibility5))
     }
 }
 
 internal extension EnvironmentValues {
+    @available(iOS, deprecated: 15)
+    @available(tvOS, deprecated: 15)
+    @available(macOS, deprecated: 12)
+    @available(watchOS, deprecated: 8)
     var dynamicTypeRange: Range<Backport<Any>.DynamicTypeSize> {
         get { self[DynamicTypeRangeKey.self] }
         set {

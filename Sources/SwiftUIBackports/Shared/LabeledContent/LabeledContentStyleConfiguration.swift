@@ -9,39 +9,29 @@ extension Backport where Wrapped == Any {
 
     /// The properties of a labeled content instance.
     public struct LabeledContentStyleConfiguration {
-        private struct Label<Content: View>: View {
-            let isHidden: Bool
-            let content: Content
+        public struct Label: View, ~Sendable {
+            @EnvironmentContains(key: "LabelsHiddenKey") private var isHidden
+            let content: any View
 
             public var body: some View {
                 if !isHidden {
-                    content
+                    AnyView(content)
                 }
             }
         }
 
-        var labelHidden: Bool = false
-
-        private let _label: AnyView
+        public struct Content: View, ~Sendable {
+            let content: any View
+            public var body: some View {
+                AnyView(content)
+            }
+        }
 
         /// The label of the labeled content instance.
-        public var label: some View {
-            Label(isHidden: labelHidden, content: _label)
-        }
+        public let label: LabeledContentStyleConfiguration.Label
 
         /// The content of the labeled content instance.
-        public let content: AnyView
-
-        internal init<L: View, C: View>(label: L, content: C) {
-            _label = .init(label)
-            self.content = .init(content)
-        }
-
-        func labelHidden(_ hidden: Bool) -> Self {
-            var copy = self
-            copy.labelHidden = hidden
-            return copy
-        }
+        public let content: LabeledContentStyleConfiguration.Content
     }
 
 }

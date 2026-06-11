@@ -67,7 +67,7 @@ public extension Backport where Wrapped: ObservableObject {
 
         @State private var state = Wrapper()
 
-        @ObservedObject private var observedObject = Wrapper()
+        @ObservedObject nonisolated private var observedObject = Wrapper()
 
         private var thunk: () -> Wrapped
 
@@ -86,6 +86,7 @@ public extension Backport where Wrapped: ObservableObject {
         /// When you change a property of the wrapped value, you can access the new
         /// value immediately. However, SwiftUI updates views displaying the value
         /// asynchronously, so the user interface might not update immediately.
+        @MainActor
         public var wrappedValue: Wrapped {
             if let object = state.value {
                 return object
@@ -111,6 +112,7 @@ public extension Backport where Wrapped: ObservableObject {
         ///             Toggle("Enabled", isOn: $model.isEnabled)
         ///         }
         ///     }
+        @MainActor
         public var projectedValue: ObservedObject<Wrapped>.Wrapper {
             ObservedObject(wrappedValue: wrappedValue).projectedValue
         }
@@ -134,6 +136,7 @@ public extension Backport where Wrapped: ObservableObject {
         /// receives a distinct copy of the data model.
         ///
         /// - Parameter thunk: An initial value for the state object.
+        @MainActor
         public init(wrappedValue thunk: @autoclosure @escaping () -> Wrapped) {
             self.thunk = thunk
         }

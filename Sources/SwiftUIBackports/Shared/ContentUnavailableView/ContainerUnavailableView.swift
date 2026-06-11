@@ -84,6 +84,10 @@ public extension Backport<Any>.ContentUnavailableView where Label == Text, Descr
     }
 }
 
+@available(iOS, deprecated: 14, message: "Use SwiftUI.Label instead")
+@available(macOS, deprecated: 11, message: "Use SwiftUI.Label instead")
+@available(tvOS, deprecated: 14, message: "Use SwiftUI.Label instead")
+@available(watchOS, deprecated: 7, message: "Use SwiftUI.Label instead")
 public extension Backport<Any>.ContentUnavailableView where Label == Backport<Any>.Label<Text, SwiftUI.Image>, Description == Text?, Actions == EmptyView {
     init(
         _ titleKey: LocalizedStringKey,
@@ -107,10 +111,18 @@ public extension Backport<Any>.ContentUnavailableView where Label == Backport<An
 }
 
 #if os(iOS)
+@available(iOS, deprecated: 17)
+@available(macOS, deprecated: 14)
+@available(tvOS, deprecated: 17)
+@available(watchOS, deprecated: 10)
 private extension BackportLabelStyle where Self == ContentUnavailableLabelStyle {
     static var contentUnavailable: Self { .init() }
 }
 
+@available(iOS, deprecated: 17)
+@available(macOS, deprecated: 14)
+@available(tvOS, deprecated: 17)
+@available(watchOS, deprecated: 10)
 private struct ContentUnavailableLabelStyle: BackportLabelStyle {
     func makeBody(configuration: Configuration) -> some View {
         VStack(spacing: 10) {
@@ -152,7 +164,7 @@ private struct ContentUnavailableLabelStyle: BackportLabelStyle {
 
 private extension View {
     @ViewBuilder
-    func largeImage() -> some View {
+    nonisolated func largeImage() -> some View {
 #if os(iOS)
         imageScale(.large)
 #else
@@ -162,35 +174,5 @@ private extension View {
             self
         }
 #endif
-    }
-}
-
-#Preview {
-    VStack {
-        Backport.ContentUnavailableView {
-            Backport.Label("Backport", systemImage: "star")
-        } description: {
-            Text("A description for the placeholder")
-        } actions: {
-            Button("Primary") { }
-            Button("Secondary") { }
-        }
-        .background(Color.gray.opacity(0.3))
-        .padding()
-
-        Divider()
-
-        if #available(iOS 17, tvOS 17, macOS 14, watchOS 10, *) {
-            ContentUnavailableView {
-                Label("Native", systemImage: "star")
-            } description: {
-                Text("A description for the placeholder")
-            } actions: {
-                Button("Primary") { }
-                Button("Secondary") { }
-            }
-            .background(Color.gray.opacity(0.3))
-            .padding()
-        }
     }
 }

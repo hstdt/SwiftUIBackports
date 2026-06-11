@@ -1,6 +1,7 @@
 import SwiftUI
 
 #if os(iOS)
+@available(iOS, deprecated: 14)
 extension Backport where Wrapped == Any {
 
     /// A view that can display and edit long-form text.
@@ -98,6 +99,7 @@ extension Backport where Wrapped == Any {
                 view.backgroundColor = .clear
                 view.dataDetectorTypes = []
                 view.returnKeyType = parent.environment.backportSubmitLabel.returnKeyType
+
                 view.autocapitalizationType = parent.environment.textInputAutocapitalization?.capitalization ?? .sentences
 
                 switch parent.environment.autocorrectionDisabled {

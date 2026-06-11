@@ -81,7 +81,7 @@ public extension Backport where Wrapped == Any {
 }
 
 private struct NavigationDestinationsEnvironmentKey: EnvironmentKey {
-    static var defaultValue: [AnyMetaType: DestinationView] = [:]
+    static let defaultValue: [AnyMetaType: DestinationView] = [:]
 }
 
 private extension EnvironmentValues {

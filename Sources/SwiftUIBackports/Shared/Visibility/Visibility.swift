@@ -1,13 +1,9 @@
 import SwiftUI
 import SwiftBackports
 
-@available(iOS, deprecated: 15)
-@available(macOS, deprecated: 12)
-@available(tvOS, deprecated: 15)
-@available(watchOS, deprecated: 8)
 extension Backport where Wrapped == Any {
 
-    public enum Visibility: Hashable, CaseIterable {
+    public enum Visibility: Hashable, CaseIterable, Sendable {
         /// The element may be visible or hidden depending on the policies of the
         /// component accepting the visibility configuration.
         ///

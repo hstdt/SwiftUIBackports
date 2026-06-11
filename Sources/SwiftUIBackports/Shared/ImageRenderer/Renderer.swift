@@ -19,6 +19,7 @@ public extension Backport<Any> {
 }
 
 public extension Backport<Any>.ImageRenderer {
+    @MainActor
     var cgImage: CGImage? {
 #if os(macOS)
         nsImage?.cgImage(forProposedRect: nil, context: .current, hints: nil)
@@ -29,6 +30,7 @@ public extension Backport<Any>.ImageRenderer {
 
 #if os(macOS)
 
+    @MainActor
     var nsImage: NSImage? {
         NSHostingController(rootView: content).view.snapshot
     }

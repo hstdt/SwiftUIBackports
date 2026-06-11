@@ -4,11 +4,19 @@ import SwiftBackports
 #if os(iOS)
 @MainActor
 public extension Backport where Wrapped: View {
+    @available(iOS, deprecated: 14.0, message: "Use SwiftUI.StateObject instead")
+    @available(macOS, deprecated: 11.0, message: "Use SwiftUI.StateObject instead")
+    @available(tvOS, deprecated: 14.0, message: "Use SwiftUI.StateObject instead")
+    @available(watchOS, deprecated: 7.0, message: "Use SwiftUI.StateObject instead")
     func focused<Value>(_ binding: Binding<Value?>, equals value: Value) -> some View where Value: Hashable {
         wrapped.modifier(FocusModifier(focused: binding, value: value))
     }
 }
 
+@available(iOS, deprecated: 14.0, message: "Use SwiftUI.StateObject instead")
+@available(macOS, deprecated: 11.0, message: "Use SwiftUI.StateObject instead")
+@available(tvOS, deprecated: 14.0, message: "Use SwiftUI.StateObject instead")
+@available(watchOS, deprecated: 7.0, message: "Use SwiftUI.StateObject instead")
 private struct FocusModifier<Value: Hashable>: ViewModifier {
     @Environment(\.backportSubmit) private var submit
     @Backport.StateObject private var coordinator = Coordinator()

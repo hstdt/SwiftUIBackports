@@ -44,17 +44,17 @@ extension EnvironmentValues {
 }
 
 private struct BackportVerticalIndicatorKey: EnvironmentKey {
-    static var defaultValue: Backport<Any>.ScrollIndicatorVisibility = .automatic
+    static let defaultValue: Backport<Any>.ScrollIndicatorVisibility = .automatic
 }
 
 private struct BackportHorizontalIndicatorKey: EnvironmentKey {
-    static var defaultValue: Backport<Any>.ScrollIndicatorVisibility = .automatic
+    static let defaultValue: Backport<Any>.ScrollIndicatorVisibility = .automatic
 }
 
 private struct BackportKeyboardDismissKey: EnvironmentKey {
-    static var defaultValue: Backport<Any>.ScrollDismissesKeyboardMode = .automatic
+    static let defaultValue: Backport<Any>.ScrollDismissesKeyboardMode = .automatic
 }
 
 private struct BackportScrollEnabledKey: EnvironmentKey {
-    static var defaultValue: Bool = true
+    static let defaultValue: Bool = true
 }

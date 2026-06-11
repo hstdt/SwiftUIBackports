@@ -1,10 +1,6 @@
 import SwiftUI
 import SwiftBackports
 
-@available(iOS, deprecated: 14, message: "Use SwiftUI.ProgressViewStyle instead")
-@available(macOS, deprecated: 11, message: "Use SwiftUI.ProgressViewStyle instead")
-@available(tvOS, deprecated: 14.0, message: "Use SwiftUI.ProgressViewStyle instead")
-@available(watchOS, deprecated: 7.0, message: "Use SwiftUI.ProgressViewStyle instead")
 /// A type that applies standard interaction behavior to all progress views
 /// within a view hierarchy.
 ///
@@ -56,7 +52,7 @@ internal struct AnyProgressViewStyle: BackportProgressViewStyle {
 }
 
 private struct BackportProgressViewStyleEnvironmentKey: EnvironmentKey {
-    static var defaultValue: AnyProgressViewStyle? = nil
+    nonisolated(unsafe) static let defaultValue: AnyProgressViewStyle? = nil
 }
 
 internal extension EnvironmentValues {

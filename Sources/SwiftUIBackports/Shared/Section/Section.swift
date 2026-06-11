@@ -29,6 +29,10 @@ extension Backport where Wrapped == Any {
 
 }
 
+@available(iOS, deprecated: 15)
+@available(tvOS, deprecated: 15)
+@available(macOS, deprecated: 12)
+@available(watchOS, deprecated: 8)
 extension Backport.Section where Wrapped == Any, Parent == Text, Footer == EmptyView {
 
     /// Creates a section with the provided section content.

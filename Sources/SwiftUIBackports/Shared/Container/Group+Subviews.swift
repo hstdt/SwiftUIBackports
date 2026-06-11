@@ -16,7 +16,7 @@ extension Backport<Any> {
         }
     }
 
-    public struct GroupElementsOfContent<Subviews, Content>: View, Sendable where Subviews: View, Content: View {
+    public struct GroupElementsOfContent<Subviews, Content>: View, ~Sendable where Subviews: View, Content: View {
         private var content: AnyView
         private var subviews: (SubviewsCollection) -> Content
 
@@ -32,7 +32,7 @@ extension Backport<Any> {
 }
 
 extension Backport<Any> {
-    public struct SubviewsCollection: RandomAccessCollection, View, Sendable {
+    public struct SubviewsCollection: RandomAccessCollection, ~Sendable {
         public typealias SubSequence = SubviewsCollectionSlice
         public typealias Iterator = IndexingIterator<SubviewsCollection>
         public typealias Indices = Range<Int>
@@ -65,7 +65,7 @@ extension Backport<Any> {
         }
     }
 
-    public struct SubviewsCollectionSlice: RandomAccessCollection, View, Sendable {
+    public struct SubviewsCollectionSlice: RandomAccessCollection, ~Sendable {
         public typealias SubSequence = SubviewsCollectionSlice
         public typealias Element = Subview
         public typealias Iterator = IndexingIterator<SubviewsCollectionSlice>
@@ -90,3 +90,6 @@ extension Backport<Any> {
         }
     }
 }
+
+extension Backport<Any>.SubviewsCollection: View { }
+extension Backport<Any>.SubviewsCollectionSlice: View { }

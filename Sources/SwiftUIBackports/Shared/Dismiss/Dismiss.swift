@@ -70,6 +70,10 @@ public extension EnvironmentValues {
     /// The dismiss action has no effect on a view that isn't currently
     /// presented. If you need to query whether SwiftUI is currently presenting
     /// a view, read the ``EnvironmentValues/backportIsPresented`` environment value.
+    @available(iOS, deprecated: 15)
+    @available(macOS, deprecated: 12)
+    @available(tvOS, deprecated: 15)
+    @available(watchOS, deprecated: 8)
     var backportDismiss: Backport<Any>.DismissAction {
         .init(presentation: presentationMode)
     }

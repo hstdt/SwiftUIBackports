@@ -46,7 +46,7 @@ public extension Backport where Wrapped == Any {
         public init<T>(payloadType: T.Type, onPaste: @escaping ([T]) -> Void) where T: _ObjectiveCBridgeable, T._ObjectiveCType: NSItemProviderReading {
             canPaste = { UIPasteboard.general.itemProviders.contains { $0.canLoadObject(ofClass: T.self) } }
             self.onPaste = {
-                Task {
+                Task.detached {
                     var result: [T] = []
 
                     for provider in UIPasteboard.general.itemProviders {
@@ -81,9 +81,13 @@ public extension Backport where Wrapped == Any {
         ///     button and the pasteboard has items that conform to
         ///     `supportedContentTypes`. This closure receives an array of
         ///     item providers that you use to inspect and load the pasteboard data.
-        @available(iOS, introduced: 14)
-        @available(macOS, introduced: 11)
+        @available(iOS, introduced: 14, deprecated: 15)
+        @available(macOS, introduced: 11, deprecated: 12)
         public init(supportedContentTypes: [UTType], payloadAction: @escaping ([NSItemProvider]) -> Void) {
+            self.init(supportedContentTypes: supportedContentTypes.map { $0.identifier }, payloadAction: payloadAction)
+        }
+
+        public init(supportedContentTypes: [UniformTypeIdentifiers.UTType], payloadAction: @escaping ([NSItemProvider]) -> Void) {
             self.init(supportedContentTypes: supportedContentTypes.map { $0.identifier }, payloadAction: payloadAction)
         }
 

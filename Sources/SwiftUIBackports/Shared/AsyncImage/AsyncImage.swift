@@ -26,7 +26,7 @@ public extension Backport where Wrapped == Any {
     ///     displays. For example, set a value of `2` for an image that you
     ///     would name with the `@2x` suffix if stored in a file on disk.
     @ViewBuilder
-    static func AsyncImage(url: URL?, scale: CGFloat = 1) -> some View {
+    nonisolated static func AsyncImage(url: URL?, scale: CGFloat = 1) -> some View {
         _AsyncImage(url: url, scale: scale)
     }
 
@@ -61,7 +61,7 @@ public extension Backport where Wrapped == Any {
     ///   - placeholder: A closure that returns the view to show until the
     ///     load operation completes successfully.
     @ViewBuilder
-    static func AsyncImage<I: View, P: View>(url: URL?, scale: CGFloat = 1, @ViewBuilder content: @escaping (Image) -> I, @ViewBuilder placeholder: @escaping () -> P) -> some View {
+    nonisolated static func AsyncImage<I: View, P: View>(url: URL?, scale: CGFloat = 1, @ViewBuilder content: @escaping (Image) -> I, @ViewBuilder placeholder: @escaping () -> P) -> some View {
         _AsyncImage(url: url, scale: scale, content: content, placeholder: placeholder)
     }
 
@@ -100,7 +100,7 @@ public extension Backport where Wrapped == Any {
     ///   - content: A closure that takes the load phase as an input, and
     ///     returns the view to display for the specified phase.
     @ViewBuilder
-    static func AsyncImage<Content: View>(url: URL?, scale: CGFloat = 1, transaction: Transaction = Transaction(), @ViewBuilder content: @escaping (AsyncImagePhase) -> Content) -> some View {
+    nonisolated static func AsyncImage<Content: View>(url: URL?, scale: CGFloat = 1, transaction: Transaction = Transaction(), @ViewBuilder content: @escaping (AsyncImagePhase) -> Content) -> some View {
         _AsyncImage(url: url, scale: scale, transaction: transaction, content: content)
     }
 
@@ -123,7 +123,7 @@ public extension Backport where Wrapped == Any {
     ///             Color.blue // Acts as a placeholder.
     ///         }
     ///     }
-    enum AsyncImagePhase {
+    enum AsyncImagePhase: Sendable {
         /// No image is loaded.
         case empty
         /// An image succesfully loaded.
@@ -145,7 +145,7 @@ public extension Backport where Wrapped == Any {
     }
 
     // An iOS 13+ async/await backport implementation
-    private struct _AsyncImage<Content: View>: View {
+    nonisolated private struct _AsyncImage<Content: View>: View {
         @State private var phase: AsyncImagePhase = .empty
 
         var url: URL?
@@ -157,29 +157,31 @@ public extension Backport where Wrapped == Any {
             ZStack {
                 content(phase)
             }
-            .backport.task(id: url) {
-                do {
-                    guard !Task.isCancelled, let url = url else { return }
-                    let (data, _) = try await URLSession.shared.backport.data(from: url)
-                    guard !Task.isCancelled else { return }
+            .modifier(
+                TaskModifier(id: url, priority: .userInitiated) {
+                    do {
+                        guard !Task.isCancelled, let url else { return }
+                        let (data, _) = try await URLSession.shared.data(from: url)
+                        guard !Task.isCancelled else { return }
 
-                    #if os(macOS)
-                    if let image = NSImage(data: data) {
-                        withTransaction(transaction) {
-                            phase = .success(Image(nsImage: image))
+#if os(macOS)
+                        if let image = NSImage(data: data) {
+                            withTransaction(transaction) {
+                                phase = .success(Image(nsImage: image))
+                            }
                         }
-                    }
-                    #else
-                    if let image = UIImage(data: data, scale: scale) {
-                        withTransaction(transaction) {
-                            phase = .success(Image(uiImage: image))
+#else
+                        if let image = UIImage(data: data, scale: scale) {
+                            withTransaction(transaction) {
+                                phase = .success(Image(uiImage: image))
+                            }
                         }
+#endif
+                    } catch {
+                        phase = .failure(error)
                     }
-                    #endif
-                } catch {
-                    phase = .failure(error)
                 }
-            }
+            )
         }
 
         init(url: URL?, scale: CGFloat = 1) where Content == AnyView {
@@ -209,4 +211,60 @@ public extension Backport where Wrapped == Any {
         }
     }
 
+}
+
+import Combine
+
+nonisolated private struct TaskModifier<ID: Equatable>: ViewModifier {
+    var id: ID
+    var priority: TaskPriority
+    var operation: AsyncImageTaskOperation
+
+    @State private var task: Task<Void, Never>?
+    @State private var publisher = PassthroughSubject<(), Never>()
+
+    init(id: ID, priority: TaskPriority, action: @escaping () async -> Void) {
+        self.id = id
+        self.priority = priority
+        self.operation = .init(action: action)
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .backport.onChange(of: id) { _ in
+                publisher.send()
+            }
+            .onReceive(publisher) { _ in
+                task?.cancel()
+                let op = operation
+                task = Task(priority: priority) {
+                    await op.action()
+                }
+            }
+            .onAppear {
+                task?.cancel()
+                let op = operation
+                task = Task(priority: priority) {
+                    await op.action()
+                }
+            }
+            .onDisappear {
+                task?.cancel()
+                task = nil
+            }
+    }
+}
+
+private final class AsyncImageTaskOperation: @unchecked Sendable {
+    let action: () async -> Void
+    init(action: @escaping () async -> Void) {
+        self.action = action
+    }
+}
+
+final class AsyncImageTaskID<ID: Equatable>: @unchecked Sendable {
+    let wrapped: ID
+    init(id: ID) {
+        self.wrapped = id
+    }
 }

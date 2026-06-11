@@ -288,7 +288,7 @@ extension Backport where Wrapped: View {
     }
 }
 
-private struct ContainerRelativeFrameModifier: ViewModifier {
+private nonisolated struct ContainerRelativeFrameModifier: ViewModifier {
     @State private var size: CGSize = .zero
 
     var axes: Axis.Set

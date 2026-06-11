@@ -25,9 +25,11 @@ extension Backport where Wrapped: View {
     ///     - items: A collection of URLs to preview.
     ///
     /// - Returns: A view that presents the preview of the contents of the URL.
-    public func quickLookPreview<Items>(_ selection: Binding<Items.Element?>, in items: Items) -> some View where Items: RandomAccessCollection, Items.Element == URL {
+    nonisolated public func quickLookPreview<Items>(_ selection: Binding<Items.Element?>, in items: Items) -> some View where Items: RandomAccessCollection, Items.Element == URL {
         #if os(iOS) || os(macOS)
-        wrapped.background(QuicklookSheet(selection: selection, items: items))
+        wrapped.background(
+            QuicklookSheet(model: .init(selection: selection, items: items))
+        )
         #else
         wrapped
         #endif
@@ -47,9 +49,13 @@ extension Backport where Wrapped: View {
     ///     - item: A <doc://com.apple.documentation/documentation/SwiftUI/Binding> to a URL that should be previewed.
     ///
     /// - Returns: A view that presents the preview of the contents of the URL.
-    public func quickLookPreview(_ item: Binding<URL?>) -> some View {
+    @ViewBuilder
+    nonisolated public func quickLookPreview(_ item: Binding<URL?>) -> some View {
         #if os(iOS) || os(macOS)
-        wrapped.background(QuicklookSheet(selection: item, items: [item.wrappedValue].compactMap { $0 }))
+        let items = [item.wrappedValue].compactMap { $0 }
+        wrapped.background {
+            QuicklookSheet(model: .init(selection: item, items: items))
+        }
         #else
         wrapped
         #endif
@@ -57,20 +63,24 @@ extension Backport where Wrapped: View {
 
 }
 
+private struct PreviewItems<Items>: @unchecked Sendable where Items: RandomAccessCollection, Items.Element == URL {
+    let selection: Binding<Items.Element?>
+    var items: Items
+}
+
 #if os(macOS)
 import QuickLookUI
 
 private struct QuicklookSheet<Items>: NSViewControllerRepresentable where Items: RandomAccessCollection, Items.Element == URL {
-    let selection: Binding<Items.Element?>
-    let items: Items
+    let model: PreviewItems<Items>
 
     func makeNSViewController(context: Context) -> PreviewController<Items> {
-        .init(selection: selection, in: items)
+        .init(selection: model.selection, in: model.items)
     }
 
     func updateNSViewController(_ controller: PreviewController<Items>, context: Context) {
-        controller.selection = selection
-        controller.items = items
+        controller.selection = model.selection
+        controller.items = model.items
     }
 }
 

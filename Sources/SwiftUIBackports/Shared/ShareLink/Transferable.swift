@@ -38,29 +38,6 @@ extension URL: Shareable {
     }
 }
 
-extension Image: Shareable {
-    public var pathExtension: String { "jpg" }
-    public var itemProvider: NSItemProvider? {
-        do {
-            let url = URL(fileURLWithPath: NSTemporaryDirectory())
-                .appendingPathComponent("\(UUID().uuidString)")
-                .appendingPathExtension(pathExtension)
-            let renderer = Backport.ImageRenderer(content: self)
-
-            #if os(iOS)
-            let data = renderer.uiImage?.jpegData(compressionQuality: 0.8)
-            #else
-            let data = renderer.nsImage?.jpg(quality: 0.8)
-            #endif
-
-            try data?.write(to: url, options: .atomic)
-            return .init(contentsOf: url)
-        } catch {
-            return nil
-        }
-    }
-}
-
 extension PlatformImage: Shareable {
     public var pathExtension: String { "jpg" }
     public var itemProvider: NSItemProvider? {

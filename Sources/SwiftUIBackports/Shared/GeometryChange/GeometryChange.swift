@@ -60,7 +60,7 @@ extension Backport where Wrapped: View {
     ///   - action: A closure to run when the transformed data changes.
     ///   - oldValue: The old value that failed the comparison check.
     ///   - newValue: The new value that failed the comparison check.
-    public nonisolated func onGeometryChange<T>(
+    nonisolated public func onGeometryChange<T>(
         for type: T.Type,
         of transform: @escaping @Sendable (GeometryProxy) -> T,
         action: @escaping (_ oldValue: T, _ newValue: T) -> Void
@@ -74,7 +74,7 @@ extension Backport where Wrapped: View {
     }
 }
 
-private struct GeometryChangeModifier<T>: ViewModifier where T: Equatable & Sendable {
+nonisolated private struct GeometryChangeModifier<T>: ViewModifier where T: Equatable & Sendable {
     @State private var value: T?
     var transform: @Sendable (GeometryProxy) -> T
     var action: (_ oldValue: T, _ newValue: T) -> Void
@@ -84,11 +84,20 @@ private struct GeometryChangeModifier<T>: ViewModifier where T: Equatable & Send
             .backport.background {
                 GeometryReader { proxy in
                     let value = transform(proxy)
-                    Color.clear
-                        .onAppear { action(value, value) }
-                        .backport.onChange(of: value) { newValue in
-                            action(value, newValue)
-                        }
+
+                    if #available(iOS 14, macOS 11, tvOS 14, watchOS 7, *) {
+                        Color.clear
+                            .onAppear { action(value, value) }
+                            .onChange(of: value) { newValue in
+                                action(value, newValue)
+                            }
+                    } else {
+                        Color.clear
+                            .onAppear { action(value, value) }
+                            .backport.onChange(of: value) { newValue in
+                                action(value, newValue)
+                            }
+                    }
                 }
                 .allowsHitTesting(false)
             }

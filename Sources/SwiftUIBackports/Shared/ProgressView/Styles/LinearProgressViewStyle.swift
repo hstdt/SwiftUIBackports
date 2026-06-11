@@ -1,10 +1,6 @@
 import SwiftUI
 import SwiftBackports
 
-@available(iOS, deprecated: 14)
-@available(macOS, deprecated: 11)
-@available(tvOS, deprecated: 14.0)
-@available(watchOS, deprecated: 7.0)
 extension Backport where Wrapped == Any {
 
     /// A progress view that visually indicates its progress using a horizontal bar.

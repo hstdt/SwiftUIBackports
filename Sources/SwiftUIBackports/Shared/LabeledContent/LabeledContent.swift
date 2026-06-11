@@ -125,13 +125,12 @@ extension Backport where Wrapped == Any {
     /// You can set label styles using the ``View/labeledContentStyle(_:)``
     /// modifier. You can also build custom styles using ``LabeledContentStyle``.
     public struct LabeledContent<Label, Content>: View {
-        @EnvironmentContains(key: "LabelsHiddenKey") private var isHidden
         @Environment(\.backportLabeledContentStyle) private var style
 
         let config: LabeledContentStyleConfiguration
 
         public var body: some View {
-            style.makeBody(configuration: config.labelHidden(isHidden))
+            AnyView(style.resolve(configuration: config))
         }
 
         /// Creates labeled content based on a labeled content style configuration.
@@ -175,8 +174,8 @@ extension Backport.LabeledContent where Wrapped == Any, Label: View, Content: Vi
     ///   - content: The value content being labeled.
     public init(@ViewBuilder content: () -> Content, @ViewBuilder label: () -> Label) {
         config = .init(
-            label: label(),
-            content: content()
+            label: .init(content: label()),
+            content: .init(content: content())
         )
     }
 

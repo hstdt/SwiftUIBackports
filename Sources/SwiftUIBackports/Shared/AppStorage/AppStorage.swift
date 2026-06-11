@@ -5,17 +5,20 @@ import SwiftBackports
 @available(macOS, deprecated: 11, message: "Use SwiftUI.AppStorage instead")
 @available(tvOS, deprecated: 14, message: "Use SwiftUI.AppStorage instead")
 @available(watchOS, deprecated: 7, message: "Use SwiftUI.AppStorage instead")
+@MainActor
 extension Backport where Wrapped == Any {
 
     /// A property wrapper type that reflects a value from `Store` and
     /// invalidates a view on a change in value in that store.
     @propertyWrapper
+    @MainActor
     public struct AppStorage<Value>: DynamicProperty {
 
         @ObservedObject
         private var _value: RefStorage<Value>
-        private let commitHandler: (Value) -> Void
+        private nonisolated let commitHandler: (Value) -> Void
 
+        @MainActor
         public var wrappedValue: Value {
             get { _value.value }
             nonmutating set {
@@ -24,6 +27,7 @@ extension Backport where Wrapped == Any {
             }
         }
 
+        @MainActor
         public var projectedValue: Binding<Value> {
             Binding(
                 get: { wrappedValue },
@@ -31,7 +35,14 @@ extension Backport where Wrapped == Any {
             )
         }
 
-        private init(value: Value, store: UserDefaults, key: String, get: @escaping (Any?) -> Value?, set: @escaping (Value) -> Void) {
+        @MainActor
+        private init(
+            value: Value,
+            store: UserDefaults,
+            key: String,
+            get: @escaping (Any?) -> Value?,
+            set: @escaping (Value) -> Void
+        ) {
             self._value = RefStorage(value: value, store: store, key: key, transform: get)
             self.commitHandler = set
         }
@@ -40,6 +51,17 @@ extension Backport where Wrapped == Any {
 
 }
 
+@available(iOS, deprecated: 14, message: "Use SwiftUI.AppStorage instead")
+@available(macOS, deprecated: 11, message: "Use SwiftUI.AppStorage instead")
+@available(tvOS, deprecated: 14, message: "Use SwiftUI.AppStorage instead")
+@available(watchOS, deprecated: 7, message: "Use SwiftUI.AppStorage instead")
+extension Backport<Any>.AppStorage: Sendable where Value: Sendable { }
+
+@available(iOS, deprecated: 14, message: "Use SwiftUI.AppStorage instead")
+@available(macOS, deprecated: 11, message: "Use SwiftUI.AppStorage instead")
+@available(tvOS, deprecated: 14, message: "Use SwiftUI.AppStorage instead")
+@available(watchOS, deprecated: 7, message: "Use SwiftUI.AppStorage instead")
+@MainActor
 public extension Backport.AppStorage {
 
     /// Creates a property that can read and write to a boolean user default.
@@ -143,6 +165,11 @@ public extension Backport.AppStorage {
 
 }
 
+@available(iOS, deprecated: 14, message: "Use SwiftUI.AppStorage instead")
+@available(macOS, deprecated: 11, message: "Use SwiftUI.AppStorage instead")
+@available(tvOS, deprecated: 14, message: "Use SwiftUI.AppStorage instead")
+@available(watchOS, deprecated: 7, message: "Use SwiftUI.AppStorage instead")
+@MainActor
 public extension Backport.AppStorage where Wrapped == Any, Value: ExpressibleByNilLiteral {
 
     /// Creates a property that can read and write an Optional boolean user
@@ -249,6 +276,11 @@ public extension Backport.AppStorage where Wrapped == Any, Value: ExpressibleByN
 
 }
 
+@available(iOS, deprecated: 14, message: "Use SwiftUI.AppStorage instead")
+@available(macOS, deprecated: 11, message: "Use SwiftUI.AppStorage instead")
+@available(tvOS, deprecated: 14, message: "Use SwiftUI.AppStorage instead")
+@available(watchOS, deprecated: 7, message: "Use SwiftUI.AppStorage instead")
+@MainActor
 public extension Backport.AppStorage where Wrapped == Any, Value: RawRepresentable {
 
     /// Creates a property that can read and write to a string user default,
@@ -273,7 +305,7 @@ public extension Backport.AppStorage where Wrapped == Any, Value: RawRepresentab
     ///     of `nil` will use the user default store from the environment.
     init(wrappedValue: Value, _ key: String, store: UserDefaults = .standard) where Value.RawValue == String {
         let rawValue = store.value(forKey: key) as? Value.RawValue
-        let value = rawValue.flatMap(Value.init) ?? wrappedValue
+        let value = rawValue.flatMap { Value(rawValue: $0) } ?? wrappedValue
         self.init(value: value, store: store, key: key,
                   get: { $0 as? Value },
                   set: { store.setValue($0.rawValue, forKey: key) })
@@ -301,7 +333,7 @@ public extension Backport.AppStorage where Wrapped == Any, Value: RawRepresentab
     ///     of `nil` will use the user default store from the environment.
     init(wrappedValue: Value, _ key: String, store: UserDefaults = .standard) where Value.RawValue == Int {
         let rawValue = store.value(forKey: key) as? Value.RawValue
-        let value = rawValue.flatMap(Value.init) ?? wrappedValue
+        let value = rawValue.flatMap { Value(rawValue: $0) } ?? wrappedValue
         self.init(value: value, store: store, key: key,
                   get: { $0 as? Value },
                   set: { store.setValue($0.rawValue, forKey: key) })

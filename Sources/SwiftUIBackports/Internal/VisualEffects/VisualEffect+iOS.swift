@@ -43,6 +43,7 @@ private extension VisualEffectBlur {
 }
 
 private extension VisualEffectBlur.Representable {
+    @MainActor
     class Coordinator {
         let blurView = UIVisualEffectView()
         let vibrancyView = UIVisualEffectView()

@@ -7,7 +7,9 @@ extension Backport<Any> {
         public init<V>(subviewOf view: V, @ViewBuilder content: @escaping (Subview) -> Content) where Data == ForEachSubviewCollection<Content>, ID == Subview.ID, Content: View, V: View {
             self.content = .init(
                 view.variadic { children in
-                    ForEachSubviewCollection(children: children, content: content)
+                    SwiftUI.ForEach(children) { child in
+                        content(.init(child))
+                    }
                 }
             )
         }
@@ -17,21 +19,21 @@ extension Backport<Any> {
 }
 
 extension Backport<Any> {
-    public struct ForEachSubviewCollection<Content>: View, RandomAccessCollection, Sendable where Content: View {
+    public struct ForEachSubviewCollection<Content>: RandomAccessCollection, ~Sendable where Content: View {
         public typealias SubSequence = Slice<ForEachSubviewCollection<Content>>
         public typealias Iterator = IndexingIterator<ForEachSubviewCollection<Content>>
         public typealias Indices = Range<Int>
         public typealias Index = Int
         public typealias Element = Subview
 
-        public var startIndex: Int { children.startIndex }
-        public var endIndex: Int { children.endIndex }
+        nonisolated public var startIndex: Int { children.startIndex }
+        nonisolated public var endIndex: Int { children.endIndex }
 
-        public func index(before i: Int) -> Int {
+        nonisolated public func index(before i: Int) -> Int {
             children.index(before: i)
         }
 
-        public func index(after i: Int) -> Int {
+        nonisolated public func index(after i: Int) -> Int {
             children.index(after: i)
         }
 
@@ -39,13 +41,7 @@ extension Backport<Any> {
             .init(children[index])
         }
 
-        fileprivate let children: _VariadicView.Children
+        nonisolated(unsafe) fileprivate let children: _VariadicView.Children
         let content: (Subview) -> Content
-
-        public var body: some View {
-            SwiftUI.ForEach(children, id: \.id) {
-                content(Subview($0))
-            }
-        }
     }
 }

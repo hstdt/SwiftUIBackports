@@ -1,10 +1,6 @@
 import SwiftUI
 import SwiftBackports
 
-@available(iOS, deprecated: 14, message: "Use SwiftUI.LabelStyle instead")
-@available(macOS, deprecated: 11, message: "Use SwiftUI.LabelStyle instead")
-@available(tvOS, deprecated: 14, message: "Use SwiftUI.LabelStyle instead")
-@available(watchOS, deprecated: 7, message: "Use SwiftUI.LabelStyle instead")
 /// A type that applies a custom appearance to all labels within a view.
 ///
 /// To configure the current label style for a view hierarchy, use the
@@ -27,14 +23,9 @@ public protocol BackportLabelStyle {
 
 }
 
-@available(iOS, deprecated: 14, message: "Use View.labelStyle instead")
-@available(macOS, deprecated: 11, message: "Use View.labelStyle instead")
-@available(tvOS, deprecated: 14.0, message: "Use View.labelStyle instead")
-@available(watchOS, deprecated: 7.0, message: "Use View.labelStyle instead")
-@MainActor
 public extension Backport where Wrapped: View {
     func labelStyle<S: BackportLabelStyle>(_ style: S) -> some View {
-        wrapped.environment(\.backportLabelStyle, .init(style))
+        wrapped.environment(\.backportLabelStyle, AnyLabelStyle(style))
     }
 }
 
@@ -52,17 +43,6 @@ internal struct AnyLabelStyle: BackportLabelStyle {
     }
 }
 
-private struct BackportLabelStyleEnvironmentKey: EnvironmentKey {
-    static var defaultValue: AnyLabelStyle = .init(.automatic)
-}
-
-@available(iOS, deprecated: 14, message: "Use View.labelStyle instead")
-@available(macOS, deprecated: 11, message: "Use View.labelStyle instead")
-@available(tvOS, deprecated: 14.0, message: "Use View.labelStyle instead")
-@available(watchOS, deprecated: 7.0, message: "Use View.labelStyle instead")
 internal extension EnvironmentValues {
-    var backportLabelStyle: AnyLabelStyle {
-        get { self[BackportLabelStyleEnvironmentKey.self] }
-        set { self[BackportLabelStyleEnvironmentKey.self] = newValue }
-    }
+    @Entry var backportLabelStyle: any BackportLabelStyle = .automatic
 }

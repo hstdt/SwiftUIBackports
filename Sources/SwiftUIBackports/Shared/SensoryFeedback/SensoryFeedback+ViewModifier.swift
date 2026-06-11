@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftBackports
 import CoreHaptics
 
-internal struct SensoryFeedbackModifier<T: Equatable>: ViewModifier {
+internal nonisolated struct SensoryFeedbackModifier<T: Equatable>: ViewModifier {
     var trigger: T
     var feedback: (_ oldValue: T, _ newValue: T) -> Backport<Any>.SensoryFeedback?
     var condition: (_ oldValue: T, _ newValue: T) -> Bool

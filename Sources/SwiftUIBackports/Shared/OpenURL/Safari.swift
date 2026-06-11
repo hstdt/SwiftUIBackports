@@ -4,9 +4,11 @@ import SwiftUI
 import SafariServices
 #endif
 
-@MainActor
-@available(iOS 15, tvOS 15, macOS 12, watchOS 8, *)
-public extension Backport<Any>.OpenURLAction.Result {
+@available(iOS, deprecated: 14)
+@available(tvOS, deprecated: 14)
+@available(macOS, deprecated: 11)
+@available(watchOS, deprecated: 7)
+@MainActor public extension Backport<Any>.OpenURLAction.Result {
     static func safari(_ url: URL) -> Self {
 #if os(macOS)
         NSWorkspace.shared.open(url)

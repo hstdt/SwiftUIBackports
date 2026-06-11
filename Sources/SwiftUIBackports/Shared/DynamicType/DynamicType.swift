@@ -155,7 +155,10 @@ extension Backport where Wrapped == Any {
 
 }
 
-@available(iOS 15, tvOS 15, macOS 12, watchOS 8, *)
+@available(iOS, deprecated: 15)
+@available(tvOS, deprecated: 15)
+@available(macOS, deprecated: 12)
+@available(watchOS, deprecated: 8)
 internal extension Backport.DynamicTypeSize {
 
     var dynamicTypeSize: DynamicTypeSize {

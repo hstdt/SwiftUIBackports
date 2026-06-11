@@ -1,6 +1,10 @@
 import SwiftUI
 import SwiftBackports
 
+@available(iOS, deprecated: 15)
+@available(tvOS, deprecated: 15)
+@available(macOS, deprecated: 12)
+@available(watchOS, deprecated: 8)
 extension Backport where Wrapped: View {
 
     /// Sets the Dynamic Type size within the view to the given value.
@@ -63,7 +67,7 @@ extension Backport where Wrapped: View {
     /// - Returns: A view that constrains the Dynamic Type size of this view
     ///   within the specified `range`.
     @ViewBuilder
-    public func dynamicTypeSize<T>(_ range: T) -> some View where T: RangeExpression, T.Bound == Backport<Any>.DynamicTypeSize {
+    nonisolated public func dynamicTypeSize<T>(_ range: T) -> some View where T: RangeExpression, T.Bound == Backport<Any>.DynamicTypeSize {
         if let range = range as? Range<T.Bound> {
             wrapped
                 .modifier(DynamicTypeRangeModifier())
@@ -92,7 +96,11 @@ extension Backport where Wrapped: View {
 
 }
 
-private struct DynamicTypeRangeModifier: ViewModifier {
+@available(iOS, deprecated: 15)
+@available(tvOS, deprecated: 15)
+@available(macOS, deprecated: 12)
+@available(watchOS, deprecated: 8)
+nonisolated private struct DynamicTypeRangeModifier: ViewModifier {
     @Environment(\.dynamicTypeRange) private var range
     @Environment(\.backportDynamicTypeSize) private var size
 

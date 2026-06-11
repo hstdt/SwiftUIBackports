@@ -1,10 +1,6 @@
 import SwiftUI
 import SwiftBackports
 
-@available(iOS, deprecated: 14)
-@available(macOS, deprecated: 11)
-@available(tvOS, deprecated: 14)
-@available(watchOS, deprecated: 7)
 extension Backport where Wrapped == Any {
 
     /// A label style that shows both the title and icon of the label using a
@@ -34,10 +30,6 @@ extension Backport where Wrapped == Any {
 
 }
 
-@available(iOS, deprecated: 14)
-@available(macOS, deprecated: 11)
-@available(tvOS, deprecated: 14)
-@available(watchOS, deprecated: 7)
 extension BackportLabelStyle where Self == Backport<Any>.TitleAndIconLabelStyle {
 
     /// A label style that shows both the title and icon of the label using a

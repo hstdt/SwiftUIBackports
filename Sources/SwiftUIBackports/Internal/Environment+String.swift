@@ -93,15 +93,19 @@ private extension EnvironmentValues {
 internal struct StringlyTypedEnvironment<Value> {
     final class Store: ObservableObject {
         var value: Value? = nil
+        nonisolated init(value: Value? = nil) {
+            self.value = value
+        }
     }
 
     @Environment(\.self) private var env
-    @ObservedObject private var store = Store()
+    @ObservedObject nonisolated private var store = Store()
 
     var key: String
 
-    init(key: String) {
+    @MainActor init(key: String) {
         self.key = key
+        _store = .init(initialValue: .init())
     }
 
     private(set) var wrappedValue: Value? {
@@ -125,10 +129,11 @@ internal struct EnvironmentContains: DynamicProperty {
     @Environment(\.self) private var env
 
     var key: String
-    @ObservedObject private var store = Store()
+    @ObservedObject nonisolated private var store = Store()
 
-    init(key: String) {
+    @MainActor init(key: String) {
         self.key = key
+        _store = .init(initialValue: .init())
     }
 
     var wrappedValue: Bool {

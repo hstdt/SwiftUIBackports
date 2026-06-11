@@ -106,14 +106,8 @@ private struct AutoCapitalizationModifier: ViewModifier {
     }
 }
 
-private struct AutoCapitalizationEnvironmentKey: EnvironmentKey {
-    static var defaultValue: Backport<Any>.TextInputAutocapitalization? = .sentences
-}
-
+@available(iOS, deprecated: 15)
 internal extension EnvironmentValues {
-    var textInputAutocapitalization: Backport<Any>.TextInputAutocapitalization? {
-        get { self[AutoCapitalizationEnvironmentKey.self] }
-        set { self[AutoCapitalizationEnvironmentKey.self] = newValue }
-    }
+    @Entry var textInputAutocapitalization: Backport<Any>.TextInputAutocapitalization? = .sentences
 }
 #endif

@@ -3,12 +3,13 @@ import SwiftBackports
 
 extension Backport where Wrapped == Any {
 
-    public struct AutomaticLabeledContentStyle: BackportLabeledContentStyle {
+    public struct AutomaticLabeledContentStyle: @preconcurrency BackportLabeledContentStyle {
         private struct Content: View {
+            @EnvironmentContains(key: "LabelsHiddenKey") private var isHidden
             let configuration: Configuration
 
             var body: some View {
-                if configuration.labelHidden {
+                if isHidden {
                     configuration.content
                 } else {
                     HStack(alignment: .firstTextBaseline) {
@@ -21,7 +22,7 @@ extension Backport where Wrapped == Any {
             }
         }
 
-        public func makeBody(configuration: Configuration) -> some View {
+        @MainActor public func makeBody(configuration: Configuration) -> some View {
             Content(configuration: configuration)
         }
     }

@@ -46,6 +46,10 @@ extension Backport where Wrapped == Any {
 
 }
 
+@available(iOS, deprecated: 14)
+@available(macOS, deprecated: 11)
+@available(tvOS, deprecated: 14.0)
+@available(watchOS, deprecated: 7.0)
 public extension BackportProgressViewStyle where Self == Backport<Any>.DefaultProgressViewStyle {
     static var automatic: Self { .init() }
 }

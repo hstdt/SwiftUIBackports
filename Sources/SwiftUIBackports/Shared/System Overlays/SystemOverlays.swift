@@ -37,7 +37,7 @@ public extension Backport where Wrapped: View {
 
 private struct PersistentSystemOverlaysPreferenceKey: PreferenceKey {
     typealias Value = Backport<Any>.Visibility
-    static var defaultValue: Value = .automatic
+    static let defaultValue: Value = .automatic
     static func reduce(value: inout Value, nextValue: () -> Value) {
         value = nextValue()
     }

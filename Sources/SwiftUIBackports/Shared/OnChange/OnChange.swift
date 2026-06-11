@@ -20,11 +20,11 @@ public extension Backport where Wrapped: View {
     ///
     /// - Returns: A view that fires an action when the specified value changes.
     /// @available(iOS, deprecated: 14.0, message: "Use View.onChange instead")
-    @available(iOS, deprecated: 14.0, message: "Use View.onChange instead")
-    @available(tvOS, deprecated: 14.0, message: "Use View.onChange instead")
-    @available(macOS, deprecated: 11.0, message: "Use View.onChange instead")
-    @available(watchOS, deprecated: 7.0, message: "Use View.onChange instead")
-    func onChange<Value: Equatable>(of value: Value, perform action: @escaping (Value) -> Void) -> some View {
+    @available(iOS, deprecated: 17.0)
+    @available(tvOS, deprecated: 17.0)
+    @available(macOS, deprecated: 14.0)
+    @available(watchOS, deprecated: 10.0)
+    nonisolated func onChange<Value: Equatable>(of value: Value, perform action: @escaping (Value) -> Void) -> some View {
         wrapped.modifier(
             ChangeModifier(
                 value: value,
@@ -82,7 +82,7 @@ public extension Backport where Wrapped: View {
     @available(tvOS, deprecated: 17.0, message: "Use View.onChange instead")
     @available(macOS, deprecated: 14.0, message: "Use View.onChange instead")
     @available(watchOS, deprecated: 10.0, message: "Use View.onChange instead")
-    func onChange<V>(of value: V, initial: Bool = false, _ action: @escaping (_ oldValue: V, _ newValue: V) -> Void) -> some View where V: Equatable {
+    @MainActor func onChange<V>(of value: V, initial: Bool = false, _ action: @escaping (_ oldValue: V, _ newValue: V) -> Void) -> some View where V: Equatable {
         wrapped.modifier(
             ChangeModifier(
                 value: value,
@@ -92,7 +92,7 @@ public extension Backport where Wrapped: View {
     }
 }
 
-private struct ChangeModifier<Value: Equatable>: ViewModifier {
+nonisolated private struct ChangeModifier<Value: Equatable>: ViewModifier {
     let value: Value
     let action: (Value, Value) -> Void
 

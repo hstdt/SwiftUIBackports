@@ -52,7 +52,7 @@ public extension Backport where Wrapped: View {
     /// - Returns: A view that runs the specified action asynchronously when
     ///   the view appears.
     @ViewBuilder
-    func task(priority: TaskPriority = .userInitiated, @_inheritActorContext _ action: @escaping @Sendable () async -> Void) -> some View {
+    func task(priority: TaskPriority = .userInitiated, _ action: sending @isolated(any) @escaping () async -> Void) -> some View {
         wrapped.modifier(
             TaskModifier(
                 id: 0,
@@ -121,7 +121,7 @@ public extension Backport where Wrapped: View {
     ///
     /// - Returns: A view that runs the specified action asynchronously when
     ///   the view appears, or restarts the task with the `id` value changes.
-    func task<T: Equatable>(id: T, priority: TaskPriority = .userInitiated, @_inheritActorContext _ action: @escaping @Sendable () async -> Void) -> some View {
+    nonisolated func task<T: Equatable>(id: T, priority: TaskPriority = .userInitiated, _ action: sending @isolated(any) @escaping () async -> Void) -> some View {
         wrapped.modifier(
             TaskModifier(
                 id: id,
@@ -133,18 +133,18 @@ public extension Backport where Wrapped: View {
 
 }
 
-private struct TaskModifier<ID: Equatable>: ViewModifier {
+nonisolated private struct TaskModifier<ID: Equatable>: ViewModifier {
     var id: ID
     var priority: TaskPriority
-    var action: @Sendable () async -> Void
+    var operation: TaskOperation
 
     @State private var task: Task<Void, Never>?
     @State private var publisher = PassthroughSubject<(), Never>()
 
-    init(id: ID, priority: TaskPriority, action: @Sendable @escaping () async -> Void) {
+    init(id: ID, priority: TaskPriority, action: sending @isolated(any) @escaping () async -> Void) {
         self.id = id
         self.priority = priority
-        self.action = action
+        self.operation = .init(action: action)
     }
 
     func body(content: Content) -> some View {
@@ -154,11 +154,17 @@ private struct TaskModifier<ID: Equatable>: ViewModifier {
             }
             .onReceive(publisher) { _ in
                 task?.cancel()
-                task = Task(priority: priority, operation: action)
+                let op = operation
+                task = Task(priority: priority) {
+                    await op.action()
+                }
             }
             .onAppear {
                 task?.cancel()
-                task = Task(priority: priority, operation: action)
+                let op = operation
+                task = Task(priority: priority) {
+                    await op.action()
+                }
             }
             .onDisappear {
                 task?.cancel()
@@ -166,4 +172,11 @@ private struct TaskModifier<ID: Equatable>: ViewModifier {
             }
     }
 
+}
+
+private final class TaskOperation: @unchecked Sendable {
+    let action: @isolated(any) () async -> Void
+    init(action: sending @isolated(any) @escaping () async -> Void) {
+        self.action = action
+    }
 }

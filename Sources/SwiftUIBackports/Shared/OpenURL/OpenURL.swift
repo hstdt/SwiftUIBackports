@@ -141,6 +141,10 @@ extension Backport where Wrapped == Any {
     }
 }
 
+@available(iOS, deprecated: 14)
+@available(tvOS, deprecated: 14)
+@available(macOS, deprecated: 11)
+@available(watchOS, deprecated: 7)
 private struct BackportOpenURLKey: EnvironmentKey {
     static var defaultValue: Backport<Any>.OpenURLAction {
         .init { url in
@@ -159,6 +163,10 @@ private struct BackportOpenURLKey: EnvironmentKey {
     }
 }
 
+@available(iOS, deprecated: 14)
+@available(tvOS, deprecated: 14)
+@available(macOS, deprecated: 11)
+@available(watchOS, deprecated: 7)
 public extension EnvironmentValues {
     var backportOpenURL: Backport<Any>.OpenURLAction {
         get { self[BackportOpenURLKey.self] }

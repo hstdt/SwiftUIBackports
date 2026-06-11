@@ -105,28 +105,14 @@ internal struct SubmitAction {
     func callAsFunction() { submit() }
 }
 
-private struct SubmitEnvironmentKey: EnvironmentKey {
-    static var defaultValue: SubmitAction = .init(submit: { })
-}
-
 internal extension EnvironmentValues {
-    var backportSubmit: SubmitAction {
-        get { self[SubmitEnvironmentKey.self] }
-        set { self[SubmitEnvironmentKey.self] = newValue }
-    }
+    @Entry var backportSubmit: SubmitAction = .init(submit: { })
 }
-
-private struct SubmitLabelEnvironmentKey: EnvironmentKey {
-    static var defaultValue: Backport.SubmitLabel = .return
-}
-
 internal extension EnvironmentValues {
-    var backportSubmitLabel: Backport<Any>.SubmitLabel {
-        get { self[SubmitLabelEnvironmentKey.self] }
-        set { self[SubmitLabelEnvironmentKey.self] = newValue }
-    }
+    @Entry var backportSubmitLabel: Backport<Any>.SubmitLabel = .return
 }
 
+@available(iOS, deprecated: 15)
 private struct SubmitModifier: ViewModifier {
     @Environment(\.backportSubmit) private var submit
     @Environment(\.backportSubmitLabel) private var label

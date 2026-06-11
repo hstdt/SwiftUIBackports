@@ -1,10 +1,10 @@
 import SwiftUI
 import SwiftBackports
 
-@available(iOS, deprecated: 16)
-@available(macOS, deprecated: 13)
-@available(tvOS, deprecated: 16)
-@available(watchOS, deprecated: 9)
+@available(iOS, deprecated: 15)
+@available(macOS, deprecated: 12)
+@available(tvOS, deprecated: 15)
+@available(watchOS, deprecated: 8)
 @MainActor
 extension Backport where Wrapped: View {
 
@@ -73,10 +73,6 @@ private final class RefreshControl: UIRefreshControl {
 }
 #endif
 
-@available(iOS, deprecated: 15)
-@available(macOS, deprecated: 12)
-@available(tvOS, deprecated: 15)
-@available(watchOS, deprecated: 8)
 extension Backport where Wrapped == Any {
 
     /// An action that initiates a refresh operation.
@@ -132,10 +128,10 @@ extension Backport where Wrapped == Any {
 
 }
 
-@available(iOS, deprecated: 16)
-@available(macOS, deprecated: 13)
-@available(tvOS, deprecated: 16)
-@available(watchOS, deprecated: 9)
+@available(iOS, deprecated: 15)
+@available(macOS, deprecated: 12)
+@available(tvOS, deprecated: 15)
+@available(watchOS, deprecated: 8)
 public extension EnvironmentValues {
 
     /// An action that initiates a refresh operation.

@@ -1,28 +1,33 @@
 import SwiftUI
 import SwiftBackports
 
-@available(iOS, deprecated: 14)
-@available(macOS, deprecated: 11)
-@available(tvOS, deprecated: 14)
-@available(watchOS, deprecated: 7)
+@available(iOS, deprecated: 17)
+@available(macOS, deprecated: 14)
+@available(tvOS, deprecated: 17)
+@available(watchOS, deprecated: 10)
 extension Backport where Wrapped == Any {
 
     /// The properties of a label.
-    public struct LabelStyleConfiguration {
+    public struct LabelStyleConfiguration: ~Sendable {
+        public struct Title: View, ~Sendable {
+            let content: any View
+            public var body: some View {
+                AnyView(content)
+            }
+        }
+
+        public struct Icon: View, ~Sendable {
+            let content: any View
+            public var body: some View {
+                AnyView(content)
+            }
+        }
 
         /// A description of the labeled item.
-        public internal(set) var title: AnyView
+        public let title: LabelStyleConfiguration.Title
 
         /// A symbolic representation of the labeled item.
-        public internal(set) var icon: AnyView
-
-        internal var environment: EnvironmentValues = .init()
-
-        func environment(_ values: EnvironmentValues) -> Self {
-            var config = self
-            config.environment = values
-            return config
-        }
+        public let icon: LabelStyleConfiguration.Icon
 
     }
 

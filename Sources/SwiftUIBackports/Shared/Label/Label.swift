@@ -94,16 +94,48 @@ extension Backport where Wrapped == Any {
 
         /// Creates a label with a custom title and icon.
         public init(@ViewBuilder title: () -> Title, @ViewBuilder icon: () -> Icon) {
-            config = .init(title: .init(title()), icon: .init(icon()))
+            config = .init(
+                title: .init(content: title()),
+                icon: .init(content: icon())
+            )
         }
 
-        @MainActor public var body: some View {
-            style.makeBody(configuration: config.environment(environment))
+        public var body: some View {
+            AnyView(style.resolve(configuration: config))
         }
     }
 
 }
 
+@available(iOS, deprecated: 14, message: "Use SwiftUI.Label instead")
+@available(macOS, deprecated: 11, message: "Use SwiftUI.Label instead")
+@available(tvOS, deprecated: 14, message: "Use SwiftUI.Label instead")
+@available(watchOS, deprecated: 7, message: "Use SwiftUI.Label instead")
+private extension BackportLabelStyle {
+    @MainActor
+    func resolve(configuration: Configuration) -> some View {
+        ResolvedBackportLabelStyle(configuration: configuration, style: self)
+    }
+}
+
+@available(iOS, deprecated: 14, message: "Use SwiftUI.Label instead")
+@available(macOS, deprecated: 11, message: "Use SwiftUI.Label instead")
+@available(tvOS, deprecated: 14, message: "Use SwiftUI.Label instead")
+@available(watchOS, deprecated: 7, message: "Use SwiftUI.Label instead")
+private struct ResolvedBackportLabelStyle<Style: BackportLabelStyle>: View {
+    var configuration: Backport<Any>.LabelStyleConfiguration
+
+    var style: Style
+
+    var body: some View {
+        style.makeBody(configuration: configuration)
+    }
+}
+
+@available(iOS, deprecated: 14, message: "Use SwiftUI.Label instead")
+@available(macOS, deprecated: 11, message: "Use SwiftUI.Label instead")
+@available(tvOS, deprecated: 14, message: "Use SwiftUI.Label instead")
+@available(watchOS, deprecated: 7, message: "Use SwiftUI.Label instead")
 extension Backport.Label where Wrapped == Any, Title == Text, Icon == Image {
 
     /// Creates a label with an icon image and a title generated from a
@@ -127,6 +159,10 @@ extension Backport.Label where Wrapped == Any, Title == Text, Icon == Image {
 
 }
 
+@available(iOS, deprecated: 14, message: "Use SwiftUI.Label instead")
+@available(macOS, deprecated: 11, message: "Use SwiftUI.Label instead")
+@available(tvOS, deprecated: 14, message: "Use SwiftUI.Label instead")
+@available(watchOS, deprecated: 7, message: "Use SwiftUI.Label instead")
 extension Backport.Label where Wrapped == Any, Title == Text, Icon == Image {
 
     /// Creates a label with a system icon image and a title generated from a
@@ -167,6 +203,10 @@ extension Backport.Label where Wrapped == Any, Title == Text, Icon == Image {
 
 }
 
+@available(iOS, deprecated: 14, message: "Use SwiftUI.Label instead")
+@available(macOS, deprecated: 11, message: "Use SwiftUI.Label instead")
+@available(tvOS, deprecated: 14, message: "Use SwiftUI.Label instead")
+@available(watchOS, deprecated: 7, message: "Use SwiftUI.Label instead")
 extension Backport.Label where Wrapped == Any {
 
     /// Creates a label representing the configuration of a style.
