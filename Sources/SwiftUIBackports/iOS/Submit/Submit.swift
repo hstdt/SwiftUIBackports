@@ -117,7 +117,7 @@ private struct SubmitModifier: ViewModifier {
     @Environment(\.backportSubmit) private var submit
     @Environment(\.backportSubmitLabel) private var label
 
-    @Backport.StateObject private var coordinator: Coordinator = .init()
+    @StateObject private var coordinator: Coordinator = .init()
 
     func body(content: Content) -> some View {
         content

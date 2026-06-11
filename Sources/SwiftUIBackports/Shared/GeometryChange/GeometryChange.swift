@@ -81,7 +81,7 @@ nonisolated private struct GeometryChangeModifier<T>: ViewModifier where T: Equa
 
     func body(content: Content) -> some View {
         content
-            .backport.background {
+            .background {
                 GeometryReader { proxy in
                     let value = transform(proxy)
 

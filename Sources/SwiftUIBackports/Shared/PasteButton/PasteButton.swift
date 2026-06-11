@@ -168,7 +168,7 @@ struct PasteButtonStyle: PrimitiveButtonStyle {
                 configuration.label
                     .padding(.horizontal)
                     .padding(.vertical, 8)
-                    .backport.background {
+                    .background {
                         RoundedRectangle(cornerRadius: 8)
                             .foregroundStyle(.tint)
                     }
