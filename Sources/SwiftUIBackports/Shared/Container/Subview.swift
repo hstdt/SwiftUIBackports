@@ -1,5 +1,10 @@
 import SwiftUI
 
+@available(iOS, deprecated: 18)
+@available(tvOS, deprecated: 18)
+@available(macOS, deprecated: 15)
+@available(watchOS, deprecated: 11)
+@available(visionOS, deprecated: 2)
 extension Backport<Any> {
     nonisolated public struct Subview: View, Identifiable, ~Sendable {
         public struct ID: Hashable, ~Sendable {

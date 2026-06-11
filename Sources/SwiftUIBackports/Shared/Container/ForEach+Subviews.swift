@@ -1,6 +1,11 @@
 import SwiftUI
 
 extension Backport<Any> {
+    @available(iOS, deprecated: 18)
+    @available(tvOS, deprecated: 18)
+    @available(macOS, deprecated: 15)
+    @available(watchOS, deprecated: 11)
+    @available(visionOS, deprecated: 2)
     public struct ForEach<Content: View, Data, ID>: View {
         private var content: AnyView
 
@@ -19,6 +24,11 @@ extension Backport<Any> {
 }
 
 extension Backport<Any> {
+    @available(iOS, deprecated: 18)
+    @available(tvOS, deprecated: 18)
+    @available(macOS, deprecated: 15)
+    @available(watchOS, deprecated: 11)
+    @available(visionOS, deprecated: 2)
     public struct ForEachSubviewCollection<Content>: RandomAccessCollection, ~Sendable where Content: View {
         public typealias SubSequence = Slice<ForEachSubviewCollection<Content>>
         public typealias Iterator = IndexingIterator<ForEachSubviewCollection<Content>>

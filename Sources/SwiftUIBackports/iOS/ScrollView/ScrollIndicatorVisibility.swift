@@ -18,7 +18,7 @@ extension Backport where Wrapped == Any {
             case hidden
         }
 
-        let visibility: Backport.Visibility
+        let visibility: Visibility
 
         var scrollViewVisible: Bool {
             visibility != .hidden

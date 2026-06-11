@@ -1,6 +1,11 @@
 import SwiftUI
 
 extension Backport<Any> {
+    @available(iOS, deprecated: 18)
+    @available(tvOS, deprecated: 18)
+    @available(macOS, deprecated: 15)
+    @available(watchOS, deprecated: 11)
+    @available(visionOS, deprecated: 2)
     public struct Group<Content: View>: View {
         private var content: Content
 
@@ -16,6 +21,11 @@ extension Backport<Any> {
         }
     }
 
+    @available(iOS, deprecated: 18)
+    @available(tvOS, deprecated: 18)
+    @available(macOS, deprecated: 15)
+    @available(watchOS, deprecated: 11)
+    @available(visionOS, deprecated: 2)
     public struct GroupElementsOfContent<Subviews, Content>: View, ~Sendable where Subviews: View, Content: View {
         private var content: AnyView
         private var subviews: (SubviewsCollection) -> Content
@@ -32,6 +42,11 @@ extension Backport<Any> {
 }
 
 extension Backport<Any> {
+    @available(iOS, deprecated: 18)
+    @available(tvOS, deprecated: 18)
+    @available(macOS, deprecated: 15)
+    @available(watchOS, deprecated: 11)
+    @available(visionOS, deprecated: 2)
     public struct SubviewsCollection: RandomAccessCollection, ~Sendable {
         public typealias SubSequence = SubviewsCollectionSlice
         public typealias Iterator = IndexingIterator<SubviewsCollection>
@@ -65,6 +80,11 @@ extension Backport<Any> {
         }
     }
 
+    @available(iOS, deprecated: 18)
+    @available(tvOS, deprecated: 18)
+    @available(macOS, deprecated: 15)
+    @available(watchOS, deprecated: 11)
+    @available(visionOS, deprecated: 2)
     public struct SubviewsCollectionSlice: RandomAccessCollection, ~Sendable {
         public typealias SubSequence = SubviewsCollectionSlice
         public typealias Element = Subview
