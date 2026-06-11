@@ -1,5 +1,9 @@
 import SwiftUI
 
+@available(iOS, deprecated: 17, message: "Use SwiftUI.SensoryFeedback instead")
+@available(tvOS, deprecated: 17, message: "Use SwiftUI.SensoryFeedback instead")
+@available(macOS, deprecated: 14, message: "Use SwiftUI.SensoryFeedback instead")
+@available(watchOS, deprecated: 10, message: "Use SwiftUI.SensoryFeedback instead")
 extension Backport where Wrapped: View {
     /// Plays the specified `feedback` when the provided `trigger` value
     /// changes.

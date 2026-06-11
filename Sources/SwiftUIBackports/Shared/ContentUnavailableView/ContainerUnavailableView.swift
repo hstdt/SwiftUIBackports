@@ -84,10 +84,6 @@ public extension Backport<Any>.ContentUnavailableView where Label == Text, Descr
     }
 }
 
-@available(iOS, deprecated: 14, message: "Use SwiftUI.Label instead")
-@available(macOS, deprecated: 11, message: "Use SwiftUI.Label instead")
-@available(tvOS, deprecated: 14, message: "Use SwiftUI.Label instead")
-@available(watchOS, deprecated: 7, message: "Use SwiftUI.Label instead")
 public extension Backport<Any>.ContentUnavailableView where Label == SwiftUI.Label<Text, SwiftUI.Image>, Description == Text?, Actions == EmptyView {
     init(
         _ titleKey: LocalizedStringKey,
