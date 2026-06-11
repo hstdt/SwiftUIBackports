@@ -13,7 +13,12 @@ extension Backport where Wrapped == Any {
     public struct DefaultLabelStyle: BackportLabelStyle {
         private struct Label: View {
             let configuration: Configuration
-            @State private var isToolbarElement: Bool = false
+            @State private var isToolbarElement: Bool
+
+            init(configuration: Configuration) {
+                self.configuration = configuration
+                _isToolbarElement = .init(initialValue: false)
+            }
 
             var body: some View {
                 if isToolbarElement {

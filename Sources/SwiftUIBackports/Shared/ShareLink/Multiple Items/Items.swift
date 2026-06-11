@@ -9,38 +9,46 @@ import SwiftBackports
 public extension Backport.ShareLink where Wrapped == Any {
     init(items: Data, subject: String? = nil, message: String? = nil)
     where PreviewImage == Never, PreviewIcon == Never, Data.Element == String, Label == DefaultShareLinkLabel {
-        self.label = .init()
-        self.data = items
-        self.subject = subject
-        self.message = message
-        self.preview = { .init($0) }
+        self.init(
+            label: .init(),
+            data: items,
+            subject: subject,
+            message: message,
+            preview: { .init($0) }
+        )
     }
 
     init(items: Data, subject: String? = nil, message: String? = nil)
     where PreviewImage == Never, PreviewIcon == Never, Data.Element == URL, Label == DefaultShareLinkLabel {
-        self.label = .init()
-        self.data = items
-        self.subject = subject
-        self.message = message
-        self.preview = { .init($0.absoluteString) }
+        self.init(
+            label: .init(),
+            data: items,
+            subject: subject,
+            message: message,
+            preview: { .init($0.absoluteString) }
+        )
     }
 
     init(items: Data, subject: String? = nil, message: String? = nil, @ViewBuilder label: () -> Label)
     where PreviewImage == Never, PreviewIcon == Never, Data.Element == String {
-        self.label = label()
-        self.data = items
-        self.subject = subject
-        self.message = message
-        self.preview = { .init($0) }
+        self.init(
+            label: label(),
+            data: items,
+            subject: subject,
+            message: message,
+            preview: { .init($0) }
+        )
     }
 
     init(items: Data, subject: String? = nil, message: String? = nil, @ViewBuilder label: () -> Label)
     where PreviewImage == Never, PreviewIcon == Never, Data.Element == URL {
-        self.label = label()
-        self.data = items
-        self.subject = subject
-        self.message = message
-        self.preview = { .init($0.absoluteString) }
+        self.init(
+            label: label(),
+            data: items,
+            subject: subject,
+            message: message,
+            preview: { .init($0.absoluteString) }
+        )
     }
 }
 #endif
