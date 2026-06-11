@@ -82,7 +82,7 @@ public extension Backport where Wrapped: View {
     @available(tvOS, deprecated: 17.0, message: "Use View.onChange instead")
     @available(macOS, deprecated: 14.0, message: "Use View.onChange instead")
     @available(watchOS, deprecated: 10.0, message: "Use View.onChange instead")
-    @MainActor func onChange<V>(of value: V, initial: Bool = false, _ action: @escaping (_ oldValue: V, _ newValue: V) -> Void) -> some View where V: Equatable {
+    nonisolated func onChange<V>(of value: V, initial: Bool = false, _ action: @escaping (_ oldValue: V, _ newValue: V) -> Void) -> some View where V: Equatable {
         wrapped.modifier(
             ChangeModifier(
                 value: value,

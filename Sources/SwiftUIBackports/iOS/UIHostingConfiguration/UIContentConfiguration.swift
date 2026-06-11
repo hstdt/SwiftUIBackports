@@ -13,6 +13,6 @@ import SwiftUI
 @available(watchOS, unavailable)
 public protocol BackportUIContentConfiguration {
     /// Initializes and returns a new instance of the content view using this configuration.
-    func makeContentView() -> UIView
+    @MainActor func makeContentView() -> UIView
 }
 #endif

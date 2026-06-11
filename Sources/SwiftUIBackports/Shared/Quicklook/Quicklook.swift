@@ -87,16 +87,15 @@ private struct QuicklookSheet<Items>: NSViewControllerRepresentable where Items:
 #elseif os(iOS)
 
 private struct QuicklookSheet<Items>: UIViewControllerRepresentable where Items: RandomAccessCollection, Items.Element == URL {
-    let selection: Binding<Items.Element?>
-    let items: Items
+    let model: PreviewItems<Items>
 
     func makeUIViewController(context: Context) -> PreviewController<Items> {
-        .init(selection: selection, in: items)
+        .init(selection: model.selection, in: model.items)
     }
 
     func updateUIViewController(_ controller: PreviewController<Items>, context: Context) {
-        controller.items = items
-        controller.selection = selection
+        controller.selection = model.selection
+        controller.items = model.items
     }
 }
 

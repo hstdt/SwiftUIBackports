@@ -4,7 +4,7 @@ import SwiftBackports
 #if os(iOS)
 import QuickLook
 
-final class PreviewController<Items>: UIViewController, UIAdaptivePresentationControllerDelegate, QLPreviewControllerDelegate, QLPreviewControllerDataSource where Items: RandomAccessCollection, Items.Element == URL {
+final class PreviewController<Items>: UIViewController, UIAdaptivePresentationControllerDelegate, @preconcurrency QLPreviewControllerDelegate, QLPreviewControllerDataSource where Items: RandomAccessCollection, Items.Element == URL {
     var items: Items
 
     var selection: Binding<Items.Element?> {

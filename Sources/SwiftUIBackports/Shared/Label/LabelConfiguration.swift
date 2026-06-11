@@ -8,15 +8,15 @@ import SwiftBackports
 extension Backport where Wrapped == Any {
 
     /// The properties of a label.
-    public struct LabelStyleConfiguration: ~Sendable {
-        public struct Title: View, ~Sendable {
+    nonisolated public struct LabelStyleConfiguration: ~Sendable {
+        nonisolated public struct Title: View, ~Sendable {
             let content: any View
             public var body: some View {
                 AnyView(content)
             }
         }
 
-        public struct Icon: View, ~Sendable {
+        nonisolated public struct Icon: View, ~Sendable {
             let content: any View
             public var body: some View {
                 AnyView(content)
@@ -24,10 +24,10 @@ extension Backport where Wrapped == Any {
         }
 
         /// A description of the labeled item.
-        public let title: LabelStyleConfiguration.Title
+        nonisolated public let title: LabelStyleConfiguration.Title
 
         /// A symbolic representation of the labeled item.
-        public let icon: LabelStyleConfiguration.Icon
+        nonisolated public let icon: LabelStyleConfiguration.Icon
 
     }
 

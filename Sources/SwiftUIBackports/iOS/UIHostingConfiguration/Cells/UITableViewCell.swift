@@ -24,7 +24,7 @@ extension Backport where Wrapped: UITableViewCell {
     ///
     /// Setting a content configuration replaces the existing contentView of the
     /// cell with a new content view instance from the configuration.
-    public var contentConfiguration: BackportUIContentConfiguration? {
+    @MainActor public var contentConfiguration: BackportUIContentConfiguration? {
         get { nil } // we can't really support anything here, so for now we'll return nil
         nonmutating set {
             wrapped.configuredView?.removeFromSuperview()

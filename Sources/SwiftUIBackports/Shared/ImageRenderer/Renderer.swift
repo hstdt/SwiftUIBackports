@@ -4,23 +4,22 @@ import SwiftBackports
 import SwiftUI
 
 public extension Backport<Any> {
-    final class ImageRenderer<Content>: ObservableObject where Content: View {
-        public var content: Content
-        public var label: String?
-        public var proposedSize: ProposedViewSize = .unspecified
-        public var scale: CGFloat = PlatformScreen.mainScreen.scale
-        public var isOpaque: Bool = false
-        public var colorMode: ColorRenderingMode = .nonLinear
+    final class ImageRenderer<Content>: ObservableObject, ~Sendable where Content: View {
+        @MainActor public var content: Content
+        @MainActor public var label: String?
+        @MainActor public var proposedSize: ProposedViewSize = .unspecified
+        @MainActor public var scale: CGFloat = PlatformScreen.mainScreen.scale
+        @MainActor public var isOpaque: Bool = false
+        @MainActor public var colorMode: ColorRenderingMode = .nonLinear
 
-        public init(content: Content) {
+        @MainActor public init(content: Content) {
             self.content = content
         }
     }
 }
 
 public extension Backport<Any>.ImageRenderer {
-    @MainActor
-    var cgImage: CGImage? {
+    @MainActor var cgImage: CGImage? {
 #if os(macOS)
         nsImage?.cgImage(forProposedRect: nil, context: .current, hints: nil)
 #else
@@ -30,14 +29,13 @@ public extension Backport<Any>.ImageRenderer {
 
 #if os(macOS)
 
-    @MainActor
-    var nsImage: NSImage? {
+    @MainActor var nsImage: NSImage? {
         NSHostingController(rootView: content).view.snapshot
     }
 
 #else
 
-    var uiImage: UIImage? {
+    @MainActor var uiImage: UIImage? {
         let controller = UIHostingController(rootView: content)
         let size = controller.view.intrinsicContentSize
         controller.view.bounds = CGRect(origin: .zero, size: size)

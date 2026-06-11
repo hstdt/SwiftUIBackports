@@ -86,14 +86,15 @@ extension Backport where Wrapped == Any {
     ///             .overlay(Text(person.initials))
     ///     }
     ///
-    public struct Label<Title, Icon>: View where Title: View, Icon: View {
+    nonisolated public struct Label<Title, Icon>: View where Title: View, Icon: View {
 
         @Environment(\.self) private var environment
         @Environment(\.backportLabelStyle) private var style
-        private var config: Backport<Any>.LabelStyleConfiguration
+
+        nonisolated let config: LabelStyleConfiguration
 
         /// Creates a label with a custom title and icon.
-        public init(@ViewBuilder title: () -> Title, @ViewBuilder icon: () -> Icon) {
+        nonisolated public init(@ViewBuilder title: () -> Title, @ViewBuilder icon: () -> Icon) {
             config = .init(
                 title: .init(content: title()),
                 icon: .init(content: icon())
@@ -112,8 +113,7 @@ extension Backport where Wrapped == Any {
 @available(tvOS, deprecated: 14, message: "Use SwiftUI.Label instead")
 @available(watchOS, deprecated: 7, message: "Use SwiftUI.Label instead")
 private extension BackportLabelStyle {
-    @MainActor
-    func resolve(configuration: Configuration) -> some View {
+    nonisolated func resolve(configuration: Configuration) -> some View {
         ResolvedBackportLabelStyle(configuration: configuration, style: self)
     }
 }
@@ -122,7 +122,7 @@ private extension BackportLabelStyle {
 @available(macOS, deprecated: 11, message: "Use SwiftUI.Label instead")
 @available(tvOS, deprecated: 14, message: "Use SwiftUI.Label instead")
 @available(watchOS, deprecated: 7, message: "Use SwiftUI.Label instead")
-private struct ResolvedBackportLabelStyle<Style: BackportLabelStyle>: View {
+nonisolated private struct ResolvedBackportLabelStyle<Style: BackportLabelStyle>: View {
     var configuration: Backport<Any>.LabelStyleConfiguration
 
     var style: Style
@@ -144,7 +144,7 @@ extension Backport.Label where Wrapped == Any, Title == Text, Icon == Image {
     /// - Parameters:
     ///    - titleKey: A title generated from a localized string.
     ///    - image: The name of the image resource to lookup.
-    public init(_ titleKey: LocalizedStringKey, image name: String) {
+    nonisolated public init(_ titleKey: LocalizedStringKey, image name: String) {
         self.init(title: { Text(titleKey) }, icon: { Image(name) })
     }
 
@@ -153,7 +153,7 @@ extension Backport.Label where Wrapped == Any, Title == Text, Icon == Image {
     /// - Parameters:
     ///    - title: A string used as the label's title.
     ///    - image: The name of the image resource to lookup.
-    public init<S>(_ title: S, image name: String) where S: StringProtocol {
+    nonisolated public init<S>(_ title: S, image name: String) where S: StringProtocol {
         self.init(title: { Text(title) }, icon: { Image(name) })
     }
 
@@ -171,7 +171,7 @@ extension Backport.Label where Wrapped == Any, Title == Text, Icon == Image {
     /// - Parameters:
     ///    - titleKey: A title generated from a localized string.
     ///    - systemImage: The name of the image resource to lookup.
-    public init(_ titleKey: LocalizedStringKey, systemImage name: String) {
+    nonisolated public init(_ titleKey: LocalizedStringKey, systemImage name: String) {
 #if os(macOS)
         if #available(macOS 11, *) {
             self.init(title: { Text(titleKey) }, icon: { Image(systemName: name) })
@@ -189,7 +189,7 @@ extension Backport.Label where Wrapped == Any, Title == Text, Icon == Image {
     /// - Parameters:
     ///    - title: A string used as the label's title.
     ///    - systemImage: The name of the image resource to lookup.
-    public init<S>(_ title: S, systemImage name: String) where S: StringProtocol {
+    nonisolated public init<S>(_ title: S, systemImage name: String) where S: StringProtocol {
 #if os(macOS)
         if #available(macOS 11, *) {
             self.init(title: { Text(title) }, icon: { Image(systemName: name) })
@@ -228,7 +228,7 @@ extension Backport.Label where Wrapped == Any {
     ///     }
     ///
     /// - Parameter configuration: The label style to use.
-    public init(_ configuration: Backport.LabelStyleConfiguration) {
+    nonisolated public init(_ configuration: Backport.LabelStyleConfiguration) {
         self.config = configuration
     }
 

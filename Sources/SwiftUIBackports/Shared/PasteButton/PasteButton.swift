@@ -37,30 +37,37 @@ public extension Backport where Wrapped == Any {
     ///
     /// A paste button automatically validates and invalidates based on changes to
     /// the pasteboard on iOS, but not on macOS.
-    struct PasteButton: View {
+    nonisolated struct PasteButton: View, ~Sendable {
         /// Creates an instance that accepts values of the specified type.
         /// - Parameters:
         ///   - type: The type that you want to paste via the `PasteButton`.
         ///   - onPaste: The handler to call on trigger of the button with at least
         ///     one item of the specified `Transferable` type from the pasteboard.
-        public init<T>(payloadType: T.Type, onPaste: @escaping ([T]) -> Void) where T: _ObjectiveCBridgeable, T._ObjectiveCType: NSItemProviderReading {
-            canPaste = { UIPasteboard.general.itemProviders.contains { $0.canLoadObject(ofClass: T.self) } }
-            self.onPaste = {
-                Task.detached {
-                    var result: [T] = []
+        nonisolated public init<T>(payloadType: T.Type, onPaste: @escaping ([T]) -> Void) where T: _ObjectiveCBridgeable, T._ObjectiveCType: NSItemProviderReading {
+            self.canPaste = {
+                UIPasteboard.general.itemProviders.contains { $0.canLoadObject(ofClass: T.self) }
+            }
 
-                    for provider in UIPasteboard.general.itemProviders {
-                        do {
-                            if provider.canLoadObject(ofClass: T.self) {
-                                let object = try await provider.loadObject(of: T.self)
-                                result.append(object)
-                            }
-                        } catch {
+            self.onPaste = PasteAction {
+                let providers = UIPasteboard.general.itemProviders.filter {
+                    $0.canLoadObject(ofClass: T._ObjectiveCType.self)
+                }
+
+                guard !providers.isEmpty else { return }
+
+                let coordinator = PasteCoordinator(count: providers.count, onPaste: onPaste)
+                let complete = PasteCompletion { object in
+                    coordinator.complete(with: object)
+                }
+
+                for provider in providers {
+                    _ = provider.loadObject(ofClass: T._ObjectiveCType.self) { object, error in
+                        if let error {
                             print(error)
                         }
-                    }
 
-                    onPaste(result)
+                        complete(with: object)
+                    }
                 }
             }
         }
@@ -112,7 +119,7 @@ public extension Backport where Wrapped == Any {
         ///     button and the pasteboard has items that conform to
         public init(supportedContentTypes: [String], payloadAction: @escaping ([NSItemProvider]) -> Void) {
             canPaste = { UIPasteboard.general.contains(pasteboardTypes: supportedContentTypes) }
-            onPaste = {
+            onPaste = PasteAction {
                 if UIPasteboard.general.contains(pasteboardTypes: supportedContentTypes) {
                     payloadAction(UIPasteboard.general.itemProviders)
                 }
@@ -120,18 +127,20 @@ public extension Backport where Wrapped == Any {
         }
 
         private let canPaste: () -> Bool
-        private let onPaste: () -> Void
+        private let onPaste: PasteAction
         private let title: String = "Paste"
         private let systemImage: String = "doc.on.clipboard"
 
         @State private var isEnabled: Bool = false
 
         public var body: some View {
+            let canPaste = canPaste
+            let onPaste = onPaste
+
             Button {
                 onPaste()
             } label: {
                 Backport.Label(title, systemImage: systemImage)
-                    .foregroundColor(.white)
             }
             .buttonStyle(PasteButtonStyle())
             .disabled(isEnabled)
@@ -173,3 +182,49 @@ struct PasteButtonStyle: PrimitiveButtonStyle {
     }
 }
 #endif
+
+private struct PasteAction: @unchecked Sendable {
+    let action: () -> Void
+
+    func callAsFunction() {
+        action()
+    }
+}
+
+private struct PasteCompletion: @unchecked Sendable {
+    let action: ((any NSItemProviderReading)?) -> Void
+
+    func callAsFunction(with value: (any NSItemProviderReading)?) {
+        action(value)
+    }
+}
+
+private final class PasteCoordinator<Wrapped>: @unchecked Sendable where Wrapped: _ObjectiveCBridgeable, Wrapped._ObjectiveCType: NSItemProviderReading {
+    private let lock = NSLock()
+    private var result: [Wrapped] = []
+    private var remaining: Int
+    private let onPaste: ([Wrapped]) -> Void
+
+    init(count: Int, onPaste: @escaping ([Wrapped]) -> Void) {
+        self.remaining = count
+        self.onPaste = onPaste
+    }
+
+    func complete(with value: (any NSItemProviderReading)?) {
+        lock.lock()
+        if let value = value as? Wrapped {
+            result.append(value)
+        }
+
+        remaining -= 1
+        let isComplete = remaining == 0
+        lock.unlock()
+
+        if isComplete {
+            DispatchQueue.main.async {
+                self.onPaste(self.result)
+            }
+        }
+    }
+}
+

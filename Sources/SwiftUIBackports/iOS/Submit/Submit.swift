@@ -140,6 +140,7 @@ private struct SubmitModifier: ViewModifier {
 
         override init() { }
 
+        @MainActor
         func observe(view: UITextField) {
             view.addTarget(self, action: #selector(didReturn), for: .editingDidEndOnExit)
         }
