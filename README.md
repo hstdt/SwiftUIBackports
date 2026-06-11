@@ -16,7 +16,11 @@ Additional APIs, when present, are kept separate from Apple API-matching backpor
 
 This repo can also serve as a reference for building practical SwiftUI backports with minimal hacks.
 
-> **Using an agent?** Install the bundled discovery skill so coding agents can find available backports automatically:
+> [!CAUTION]
+> From v27, SwiftUIBackports will require iOS 15+, macOS 12+, tvOS 15+, and watchOS 8+. If you need to support older platform versions, remain on 26.2.0.
+
+> [!NOTE]
+> Using an agent? Install the bundled discovery skill so coding agents can find available backports automatically:
 >
 > ```sh
 > npx skills add shaps80/SwiftUIBackports
