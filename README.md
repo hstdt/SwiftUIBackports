@@ -17,7 +17,7 @@ Additional APIs, when present, are kept separate from Apple API-matching backpor
 This repo can also serve as a reference for building practical SwiftUI backports with minimal hacks.
 
 > [!CAUTION]
-> From v27, SwiftUIBackports will require iOS 15+, macOS 12+, tvOS 15+, and watchOS 8+. If you need to support older platform versions, remain on 26.2.0.
+> From v27, SwiftUIBackports will require iOS 15+, macOS 12+, tvOS 15+, and watchOS 8+. If you need to support older platform versions, remain on 26.x.
 
 > [!NOTE]
 > Using an agent? Install the bundled discovery skill so coding agents can find available backports automatically:
@@ -85,24 +85,6 @@ Use that skill when working in an app that targets older Apple OS versions, or w
 - search the bundled backport index
 - prefer native SwiftUI when the deployment target is new enough
 - use `.backport`, `Backport`, or `backport` environment keys when a matching backport exists
-
-## Extras
-
-**Modal Presentations**
-
-Adding this to your presented view, you can use the provided closure to present an `ActionSheet` to a user when they attempt to dismiss interactively. You can also use this to disable interactive dismissals entirely.
-
-```swift
-presentation(isModal: true) { /* attempt */ }
-```
-
-**FittingGeometryReader**
-
-A custom `GeometryReader` implementation that correctly auto-sizes itself to its content. This is useful in many cases where you need a `GeometryReader` but don't want it to implicitly take up its parent View's bounds.
-
-**FittingScrollView**
-
-A custom `ScrollView` that respects `Spacer`'s when the content is not scrollable. This is useful when you need to place a view at the edges of your scrollview while its content is small enough to not require scrolling. Another great use case is vertically centered content that becomes `top` aligned once the content requires scrolling.
 
 ## Installation
 
