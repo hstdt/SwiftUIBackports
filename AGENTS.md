@@ -16,6 +16,7 @@ If the available SwiftUI max version is newer than the newest ref version in `re
 - Main target is `SwiftUIBackports`.
 - Preserve Apple SwiftUI API parity for backports: names, overloads, behavior, docs, and availability should match native APIs where practical.
 - Use the refs to discover official API introduction versions. Backport APIs should be deprecated on each platform at the version where the native API was introduced for that platform. Example: if `presentationBackgroundInteraction` is officially introduced on iOS 16.3, the iOS deprecation for the backport should be 16.3.
+- When a full SwiftUI type is backported, usually put native-availability deprecation on the backported type itself, not every initializer, method, or extension on that type. Add member-level deprecations only when needed, such as a member whose native API was introduced in a different version. This does not apply to modifiers, environment values, or other non-type API backports.
 - Prefer `.backport` modifiers for view/transition APIs and `Backport<Any>` for pure namespace types.
 - Keep UIKit/AppKit bridge details internal/private unless public API parity demands exposure.
 - Use `@available` and `#if os(...)` deliberately. Minimum floors are iOS 13, tvOS 13, watchOS 6, macOS 10.15.
