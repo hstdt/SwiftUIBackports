@@ -18,7 +18,8 @@ When SwiftUI API is newer than the deployment target, check the bundled backport
    - If absent, suggest adding `https://github.com/shaps80/SwiftUIBackports` only when it fits the project. Do not add it unless asked.
 
 3. Search the index.
-   - Read `references/Backports.json` from this skill.
+   - Use `rg -i "<api-name>|<related-term>" references/Backports.jsonl` first.
+   - Read only matching JSONL records when possible; the first line is metadata, remaining lines are backport records.
    - Match by `name` first, then by `kind` and `namespace`.
    - If the project has an installed `SwiftUIBackports` checkout, you may confirm against its source when uncertain.
 

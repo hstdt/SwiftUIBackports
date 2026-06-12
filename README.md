@@ -68,10 +68,10 @@ Environment backports use a `backport` prefix:
 The supported backports are indexed in:
 
 ```text
-skills/swiftui-backports/references/Backports.json
+skills/swiftui-backports/references/Backports.jsonl
 ```
 
-The index lists implemented backports, their kind, source location, and platform availability. Prefer this index over static README examples, which get stale quickly.
+The line-oriented index lists implemented backports, their kind, source location, and platform availability. Prefer this index over static README examples, which get stale quickly.
 
 This repository also includes an agent skill:
 
