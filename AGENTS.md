@@ -6,6 +6,8 @@ When talking to Shaps, sacrifice grammar for concision.
 
 Before code work, read `CONTEXT.md`. It defines project terms, API-shape expectations, availability rules, and release policy. If an ADR exists under `docs/adr/` for the area you touch, read it too.
 
+When implementing a SwiftUI API backport, check `swiftui.ref` and `swiftuicore.ref` in the repo root for Xcode SwiftUI/SwiftUICore module interface references. Use them to confirm native signatures, overload sets, generics, availability, and hidden helper types before shaping public API.
+
 ## Project Rules
 
 - This is a SwiftPM library, not an app.
