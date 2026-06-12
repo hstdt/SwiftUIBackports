@@ -1,6 +1,6 @@
 # AGENTS.md
 
-When talking to Shaps, sacrifice grammar for concision.
+When talking to the user, sacrifice grammar for concision.
 
 ## First Reads
 
@@ -8,13 +8,14 @@ Before code work, read `CONTEXT.md`. It defines project terms, API-shape expecta
 
 When implementing a SwiftUI API backport, check `refs/swiftui-*.ref` and `refs/swiftuicore-*.ref` for Xcode SwiftUI/SwiftUICore module interface references. Use the newest versioned refs to confirm native signatures, overload sets, generics, availability, and hidden helper types before shaping public API.
 
-If the available SwiftUI max version is newer than the newest ref version in `refs/`, tell Shaps the ref files may need updating before relying on them.
+If the available SwiftUI max version is newer than the newest ref version in `refs/`, tell the user the ref files may need updating before relying on them.
 
 ## Project Rules
 
 - This is a SwiftPM library, not an app.
 - Main target is `SwiftUIBackports`.
 - Preserve Apple SwiftUI API parity for backports: names, overloads, behavior, docs, and availability should match native APIs where practical.
+- Use the refs to discover official API introduction versions. Backport APIs should be deprecated on each platform at the version where the native API was introduced for that platform. Example: if `presentationBackgroundInteraction` is officially introduced on iOS 16.3, the iOS deprecation for the backport should be 16.3.
 - Prefer `.backport` modifiers for view/transition APIs and `Backport<Any>` for pure namespace types.
 - Keep UIKit/AppKit bridge details internal/private unless public API parity demands exposure.
 - Use `@available` and `#if os(...)` deliberately. Minimum floors are iOS 13, tvOS 13, watchOS 6, macOS 10.15.
