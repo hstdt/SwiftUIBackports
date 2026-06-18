@@ -4,7 +4,7 @@ import SwiftBackports
 import SwiftUI
 
 public extension Backport<Any> {
-    final class ImageRenderer<Content>: ObservableObject, ~Sendable where Content: View {
+    final class ImageRenderer<Content>: ObservableObject where Content: View {
         @MainActor public var content: Content
         @MainActor public var label: String?
         @MainActor public var proposedSize: ProposedViewSize = .unspecified

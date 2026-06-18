@@ -9,7 +9,7 @@ extension Backport where Wrapped == Any {
 
     /// The properties of a labeled content instance.
     public struct LabeledContentStyleConfiguration {
-        public struct Label: View, ~Sendable {
+        public struct Label: View {
             @EnvironmentContains(key: "LabelsHiddenKey") private var isHidden
             let content: any View
 
@@ -20,7 +20,7 @@ extension Backport where Wrapped == Any {
             }
         }
 
-        public struct Content: View, ~Sendable {
+        public struct Content: View {
             let content: any View
             public var body: some View {
                 AnyView(content)

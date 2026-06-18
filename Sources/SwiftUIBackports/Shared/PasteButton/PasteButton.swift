@@ -37,7 +37,7 @@ public extension Backport where Wrapped == Any {
     ///
     /// A paste button automatically validates and invalidates based on changes to
     /// the pasteboard on iOS, but not on macOS.
-    nonisolated struct PasteButton: View, ~Sendable {
+    nonisolated struct PasteButton: View {
         /// Creates an instance that accepts values of the specified type.
         /// - Parameters:
         ///   - type: The type that you want to paste via the `PasteButton`.
@@ -222,4 +222,3 @@ private final class PasteCoordinator<Wrapped>: @unchecked Sendable where Wrapped
         }
     }
 }
-

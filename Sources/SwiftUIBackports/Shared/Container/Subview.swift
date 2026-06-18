@@ -19,9 +19,9 @@ extension Backport<Any> {
     /// single leaf view, or container, a subview may represent a view after the
     /// application of styles. As such, attempting to apply a style to it may
     /// have no affect.
-    nonisolated public struct Subview: View, Identifiable, ~Sendable {
+    nonisolated public struct Subview: View, Identifiable {
         /// A unique identifier for a subview.
-        public struct ID: Hashable, ~Sendable {
+        public struct ID: Hashable {
             var wrapped: AnyHashable
         }
 

@@ -90,7 +90,7 @@ extension Backport<Any> {
     ///
     /// You don't use this type directly. Instead SwiftUI creates this type on
     /// your behalf.
-    public struct GroupElementsOfContent<Subviews, Content>: View, ~Sendable where Subviews: View, Content: View {
+    public struct GroupElementsOfContent<Subviews, Content>: View where Subviews: View, Content: View {
         private var content: AnyView
         private var subviews: (SubviewsCollection) -> Content
 
@@ -175,7 +175,7 @@ extension Backport<Any> {
     ///
     /// The collection's elements are the pieces that make up the given view, and
     /// the collection as a whole acts as a proxy for the original view.
-    public struct SubviewsCollection: RandomAccessCollection, ~Sendable {
+    public struct SubviewsCollection: RandomAccessCollection {
         public typealias SubSequence = SubviewsCollectionSlice
         public typealias Iterator = IndexingIterator<SubviewsCollection>
         public typealias Indices = Range<Int>
@@ -209,7 +209,7 @@ extension Backport<Any> {
     }
 
     /// A slice of a SubviewsCollection.
-    public struct SubviewsCollectionSlice: RandomAccessCollection, ~Sendable {
+    public struct SubviewsCollectionSlice: RandomAccessCollection {
         public typealias SubSequence = SubviewsCollectionSlice
         public typealias Element = Subview
         public typealias Iterator = IndexingIterator<SubviewsCollectionSlice>

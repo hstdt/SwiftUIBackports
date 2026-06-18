@@ -33,7 +33,7 @@ extension Backport where Wrapped == Any {
             Color.blue
          }
      */
-    public struct UIHostingConfiguration<Label, Background>: BackportUIContentConfiguration, ~Sendable where Label: View, Background: View {
+    public struct UIHostingConfiguration<Label, Background>: BackportUIContentConfiguration where Label: View, Background: View {
         var content: Label
         var background: AnyView?
         var insets: ProposedInsets

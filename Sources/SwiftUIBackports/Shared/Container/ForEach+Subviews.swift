@@ -48,7 +48,7 @@ extension Backport<Any> {
 extension Backport<Any> {
     /// A collection which allows a view to be treated as a collection of its
     /// subviews in a for each loop.
-    public struct ForEachSubviewCollection<Content>: RandomAccessCollection, ~Sendable where Content: View {
+    public struct ForEachSubviewCollection<Content>: RandomAccessCollection where Content: View {
         public typealias SubSequence = Slice<ForEachSubviewCollection<Content>>
         public typealias Iterator = IndexingIterator<ForEachSubviewCollection<Content>>
         public typealias Indices = Range<Int>
